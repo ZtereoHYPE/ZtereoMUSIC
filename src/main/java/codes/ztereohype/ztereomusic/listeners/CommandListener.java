@@ -45,8 +45,8 @@ public class CommandListener extends ListenerAdapter {
         try {
             command.execute(event, args);
         } catch (Exception e) {
-            System.out.println(e);
             message.getChannel().sendMessage("uh oh something really bad happened and yeah so yeah everything is aborted and cancelled i give up this is too hard kthxbye").queue();
+            throw e;
         }
     }
 }

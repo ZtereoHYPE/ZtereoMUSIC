@@ -16,7 +16,7 @@ import java.util.List;
 public class TrackScheduer extends AudioEventAdapter {
 
     private final AudioPlayer player;
-    private final List<AudioTrack> trackQueue = new ArrayList<AudioTrack>();
+    private final List<AudioTrack> trackQueue = new ArrayList<>();
     private AudioTrack currentTrack;
     private final MessageChannel infoChannel;
 
