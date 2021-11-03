@@ -1,9 +1,10 @@
 package codes.ztereohype.ztereomusic;
 
-import codes.ztereohype.ztereomusic.audio.TrackScheduer;
+import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.commands.Ping;
-import codes.ztereohype.ztereomusic.command.commands.Playtest;
+import codes.ztereohype.ztereomusic.command.commands.Play;
+import codes.ztereohype.ztereomusic.command.commands.Skip;
 import codes.ztereohype.ztereomusic.database.Config;
 import codes.ztereohype.ztereomusic.listeners.CommandListener;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -25,7 +26,7 @@ public class Bot {
     private static @Getter final Map<String, String> commandAliases = new HashMap<>();
 
     public static AudioPlayerManager playerManager;
-    public static Map<VoiceChannel, TrackScheduer> trackScheduerMap = new HashMap<>();
+    public static Map<VoiceChannel, TrackManager> trackScheduerMap = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         config = new Config("./config.json5");
@@ -40,11 +41,16 @@ public class Bot {
         Ping ping = new Ping();
         commandMap.put(ping.getMeta().getName(), ping);
 
-        Playtest playtest = new Playtest();
-        commandMap.put(playtest.getMeta().getName(), playtest);
+        Play play = new Play();
+        commandMap.put(play.getMeta().getName(), play);
+
+        Skip skip = new Skip();
+        commandMap.put(skip.getMeta().getName(), skip);
 
         for (String commandName : commandMap.keySet()) {
+            System.out.println("loading aliases from: " + commandName);
             for (String aliasName : commandMap.get(commandName).getMeta().getAliases()) {
+                System.out.println("loaded " + aliasName + " from command " + commandName);
                 commandAliases.put(aliasName, commandName);
             }
         }
