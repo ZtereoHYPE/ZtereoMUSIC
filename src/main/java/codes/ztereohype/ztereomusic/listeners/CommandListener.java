@@ -1,6 +1,6 @@
 package codes.ztereohype.ztereomusic.listeners;
 
-import codes.ztereohype.ztereomusic.Bot;
+import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import codes.ztereohype.ztereomusic.command.Command;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -12,9 +12,9 @@ import java.util.Map;
 
 public class CommandListener extends ListenerAdapter {
     // TODO: load prefix from a config
-    private static final String PREFIX = Bot.getInstance().getConfig().getPropreties().get("prefix");
-    private static final Map<String, Command> COMMAND_MAP = Bot.getInstance().getCommandMap();
-    private static final Map<String, String> COMMAND_ALIASES = Bot.getInstance().getCommandAliases();
+    private static final String PREFIX = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("prefix");
+    private static final Map<String, Command> COMMAND_MAP = ZtereoMUSIC.getInstance().getCommandMap();
+    private static final Map<String, String> COMMAND_ALIASES = ZtereoMUSIC.getInstance().getCommandAliases();
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {

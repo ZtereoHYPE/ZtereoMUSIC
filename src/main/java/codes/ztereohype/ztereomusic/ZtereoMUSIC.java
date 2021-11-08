@@ -28,8 +28,8 @@ import static net.dv8tion.jda.api.requests.GatewayIntent.GUILD_VOICE_STATES;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
-public class Bot {
-    public static final Bot INSTANCE = new Bot();
+public class ZtereoMUSIC {
+    public static final ZtereoMUSIC INSTANCE = new ZtereoMUSIC();
 
     private final Map<String, Command> commandMap = new HashMap<>();
     private final Map<String, String> commandAliases = new HashMap<>();
@@ -40,25 +40,25 @@ public class Bot {
     private AudioPlayerManager playerManager;
     private Map<Long, GuildMusicPlayer> guildMusicPlayerMap = new HashMap<>();
 
-    private Bot() {
+    private ZtereoMUSIC() {
     }
 
-    public static Bot getInstance() {
-        return Bot.INSTANCE;
+    public static ZtereoMUSIC getInstance() {
+        return ZtereoMUSIC.INSTANCE;
     }
 
     @SneakyThrows({ JsonSyntaxException.class, FileNotFoundException.class, LoginException.class,
                     InterruptedException.class })
     public static void main(String[] args) {
-        Bot bot = Bot.getInstance();
+        ZtereoMUSIC ztereoMUSIC = ZtereoMUSIC.getInstance();
 
-        bot.setConfig(Config.loadFrom("./config.json5"));
-        bot.setJda(JDABuilder.createDefault(bot.getConfig().getPropreties().get("token"), GUILD_MESSAGES,
-                                            GUILD_VOICE_STATES).build().awaitReady());
+        ztereoMUSIC.setConfig(Config.loadFrom("./config.json5"));
+        ztereoMUSIC.setJda(JDABuilder.createDefault(ztereoMUSIC.getConfig().getPropreties().get("token"), GUILD_MESSAGES,
+                                                    GUILD_VOICE_STATES).build().awaitReady());
 
-        bot.setupAudio();
-        bot.setCommands();
-        bot.setListeners();
+        ztereoMUSIC.setupAudio();
+        ztereoMUSIC.setCommands();
+        ztereoMUSIC.setListeners();
     }
 
     private void setCommands() {
