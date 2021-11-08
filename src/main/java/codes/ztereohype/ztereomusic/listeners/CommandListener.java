@@ -12,9 +12,9 @@ import java.util.Map;
 
 public class CommandListener extends ListenerAdapter {
     // TODO: load prefix from a config
-    private static final String PREFIX = Bot.getConfig().getPropreties().get("prefix");
-    private static final Map<String, Command> COMMAND_MAP = Bot.getCommandMap();
-    private static final Map<String, String> COMMAND_ALIASES = Bot.getCommandAliases();
+    private static final String PREFIX = Bot.getInstance().getConfig().getPropreties().get("prefix");
+    private static final Map<String, Command> COMMAND_MAP = Bot.getInstance().getCommandMap();
+    private static final Map<String, String> COMMAND_ALIASES = Bot.getInstance().getCommandAliases();
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {

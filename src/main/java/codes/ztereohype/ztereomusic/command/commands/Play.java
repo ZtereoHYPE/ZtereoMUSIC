@@ -43,7 +43,7 @@ public class Play implements Command {
         VoiceChannel voiceChannel = author.getVoiceState().getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
         AudioManager manager = guild.getAudioManager();
-        AudioPlayerManager playerManager = Bot.playerManager;
+        AudioPlayerManager playerManager = Bot.getInstance().getPlayerManager();
 
         // check if args merged are/have url, if so try to feed it into lava, else try to youtube api the fuck out of it.
         String mergedArgs = String.join(" ", args);

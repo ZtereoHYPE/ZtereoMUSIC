@@ -14,14 +14,14 @@ public class GuildMusicPlayers {
 
         // If I get called in a different vc I delete the old manager
         if (!isInSameVC) {
-            Bot.guildMusicPlayerMap.remove(guildId);
+            Bot.getInstance().getGuildMusicPlayerMap().remove(guildId);
         }
 
-        GuildMusicPlayer musicPlayer = Bot.guildMusicPlayerMap.get(guildId);
+        GuildMusicPlayer musicPlayer = Bot.getInstance().getGuildMusicPlayerMap().get(guildId);
 
         if (musicPlayer == null) {
-            musicPlayer = new GuildMusicPlayer(Bot.playerManager, infoChannel);
-            Bot.guildMusicPlayerMap.put(guildId, musicPlayer);
+            musicPlayer = new GuildMusicPlayer(Bot.getInstance().getPlayerManager(), infoChannel);
+            Bot.getInstance().getGuildMusicPlayerMap().put(guildId, musicPlayer);
             guild.getAudioManager().openAudioConnection(requestedChannel);
         }
 
@@ -33,7 +33,7 @@ public class GuildMusicPlayers {
     // stops player, disconnects from vc, and deletes the wrapper
     public static void removeGuildAudioPlayer(Guild guild) {
         long guildId = guild.getIdLong();
-        GuildMusicPlayer musicPlayer = Bot.guildMusicPlayerMap.get(guildId);
+        GuildMusicPlayer musicPlayer = Bot.getInstance().getGuildMusicPlayerMap().get(guildId);
 
         if (musicPlayer == null) return;
 
@@ -41,6 +41,6 @@ public class GuildMusicPlayers {
         guild.getAudioManager().closeAudioConnection();
 
         //todo: remove this when will be part of disconnection listener
-        Bot.guildMusicPlayerMap.remove(guildId);
+        Bot.getInstance().getGuildMusicPlayerMap().remove(guildId);
     }
 }
