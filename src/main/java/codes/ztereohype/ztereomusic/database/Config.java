@@ -3,22 +3,29 @@ package codes.ztereohype.ztereomusic.database;
 import lombok.Getter;
 import net.shadew.json.Json;
 import net.shadew.json.JsonNode;
+import net.shadew.json.JsonSyntaxException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
-    private @Getter final Map<String, String> propreties = new HashMap<>();
-    private final String path;
+    private @Getter Map<String, String> propreties = new HashMap<>();
+    private String path;
 
-    public Config(String pathname) throws Exception {
+    public static Config loadFrom(String path) throws JsonSyntaxException, FileNotFoundException {
+        Config config = new Config();
+
         Json json5 = Json.json5();
-        JsonNode tree = json5.parse(new File(pathname));
-        this.path = pathname;
+        JsonNode tree = json5.parse(new File(path));
+
+        config.path = path;
 
         for (String key : tree.keys()) {
-            propreties.put(key, tree.get(key).asString());
+            config.getPropreties().put(key, tree.get(key).asString());
         }
+
+        return config;
     }
 }

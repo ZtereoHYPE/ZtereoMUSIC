@@ -4,7 +4,7 @@ plugins {
     id "io.freefair.lombok" version "6.2.0"
 }
 
-mainClassName = 'codes.ztereohype.ztereomusic.Bot'
+mainClassName = 'codes.ztereohype.ztereomusic.ZtereoMUSIC'
 
 version '0.0.1'
 

@@ -1,6 +1,6 @@
 package codes.ztereohype.ztereomusic.audio;
 
-import codes.ztereohype.ztereomusic.Bot;
+import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -14,14 +14,14 @@ public class GuildMusicPlayers {
 
         // If I get called in a different vc I delete the old manager
         if (!isInSameVC) {
-            Bot.guildMusicPlayerMap.remove(guildId);
+            ZtereoMUSIC.getInstance().getGuildMusicPlayerMap().remove(guildId);
         }
 
-        GuildMusicPlayer musicPlayer = Bot.guildMusicPlayerMap.get(guildId);
+        GuildMusicPlayer musicPlayer = ZtereoMUSIC.getInstance().getGuildMusicPlayerMap().get(guildId);
 
         if (musicPlayer == null) {
-            musicPlayer = new GuildMusicPlayer(Bot.playerManager, infoChannel);
-            Bot.guildMusicPlayerMap.put(guildId, musicPlayer);
+            musicPlayer = new GuildMusicPlayer(ZtereoMUSIC.getInstance().getPlayerManager(), infoChannel);
+            ZtereoMUSIC.getInstance().getGuildMusicPlayerMap().put(guildId, musicPlayer);
             guild.getAudioManager().openAudioConnection(requestedChannel);
         }
 
@@ -33,7 +33,7 @@ public class GuildMusicPlayers {
     // stops player, disconnects from vc, and deletes the wrapper
     public static void removeGuildAudioPlayer(Guild guild) {
         long guildId = guild.getIdLong();
-        GuildMusicPlayer musicPlayer = Bot.guildMusicPlayerMap.get(guildId);
+        GuildMusicPlayer musicPlayer = ZtereoMUSIC.getInstance().getGuildMusicPlayerMap().get(guildId);
 
         if (musicPlayer == null) return;
 
@@ -41,6 +41,6 @@ public class GuildMusicPlayers {
         guild.getAudioManager().closeAudioConnection();
 
         //todo: remove this when will be part of disconnection listener
-        Bot.guildMusicPlayerMap.remove(guildId);
+        ZtereoMUSIC.getInstance().getGuildMusicPlayerMap().remove(guildId);
     }
 }

@@ -1,6 +1,6 @@
 package codes.ztereohype.ztereomusic.command.commands;
 
-import codes.ztereohype.ztereomusic.Bot;
+import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import codes.ztereohype.ztereomusic.audio.GuildMusicPlayer;
 import codes.ztereohype.ztereomusic.audio.GuildMusicPlayers;
 import codes.ztereohype.ztereomusic.command.Command;
@@ -43,7 +43,7 @@ public class Play implements Command {
         VoiceChannel voiceChannel = author.getVoiceState().getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
         AudioManager manager = guild.getAudioManager();
-        AudioPlayerManager playerManager = Bot.playerManager;
+        AudioPlayerManager playerManager = ZtereoMUSIC.getInstance().getPlayerManager();
 
         // check if args merged are/have url, if so try to feed it into lava, else try to youtube api the fuck out of it.
         String mergedArgs = String.join(" ", args);
