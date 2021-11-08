@@ -13,9 +13,13 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.shadew.json.JsonSyntaxException;
 
+import javax.security.auth.login.LoginException;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,10 +47,12 @@ public class Bot {
         return Bot.INSTANCE;
     }
 
-    public static void main(String[] args) throws Exception {
+    @SneakyThrows({ JsonSyntaxException.class, FileNotFoundException.class, LoginException.class,
+                    InterruptedException.class })
+    public static void main(String[] args) {
         Bot bot = Bot.getInstance();
 
-        bot.setConfig(new Config("./config.json5"));
+        bot.setConfig(Config.loadFrom("./config.json5"));
         bot.setJda(JDABuilder.createDefault(bot.getConfig().getPropreties().get("token"), GUILD_MESSAGES,
                                             GUILD_VOICE_STATES).build().awaitReady());
 
