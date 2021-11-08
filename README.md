@@ -15,6 +15,7 @@
 
 ## To Dos:
 - Play command
+  - search on youtube for title and spotify songs.
 - Pause command
 - Skip command
 - Disconnect command
@@ -31,3 +32,7 @@
 - Proper database for server preferences (prefix etc)
 - Various listeners if there's nobody in vc for a while or if it gets disconnected or if last disconnects (stop playin)
 - Other TBA...
+
+## Thankies
+This wouldn't have been possible without the amazing folks behind [lavaplayer](https://github.com/sedmelluq/lavaplayer) and [JDA](https://github.com/DV8FromTheWorld/JDA).
+And without @ReperakDev and @FoxShadew. Thank you.
