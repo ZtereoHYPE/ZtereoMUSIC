@@ -1,12 +1,11 @@
 package codes.ztereohype.ztereomusic.command.commands;
 
 import codes.ztereohype.ztereomusic.Bot;
-import codes.ztereohype.ztereomusic.audio.AudioPlayerSendHandler;
-import codes.ztereohype.ztereomusic.audio.TrackManager;
+import codes.ztereohype.ztereomusic.audio.GuildMusicPlayer;
+import codes.ztereohype.ztereomusic.audio.GuildMusicPlayers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -63,54 +62,18 @@ public class Play implements Command {
             identifier = mergedArgs;
         }
 
-
-        /* Generally you would want to create a player per every
-        different target you might want to separately stream audio to.
-        It is totally fine to create them even if they are unlikely to be used,
-        as they do not use any resources on their own without an active track. */
-        AudioPlayer player;
-        TrackManager trackManager;
-
-        boolean isInVC = manager.isConnected();
-        boolean isInSameVC = isInVC && Objects.equals(manager.getConnectedChannel(), voiceChannel);
-
-        if (isInSameVC && Bot.trackScheduerMap.containsKey(voiceChannel)) {
-            System.out.println("Found a trackScheduler for this VC already! reusing...");
-
-            trackManager = Bot.trackScheduerMap.get(voiceChannel);
-            player = trackManager.getPlayer();
-
-            player.addListener(trackManager);
-
-        } else {
-            // Maybe we don't wanna clear the whole queue when he gets kicked out?
-            if (Bot.trackScheduerMap.containsKey(voiceChannel)) {
-                System.out.println("Found old trackScheduler for this channel. Cleaning it up...");
-                Bot.trackScheduerMap.remove(voiceChannel);
-            }
-
-            System.out.println("Creating a new trackScheduler...");
-
-            player = playerManager.createPlayer();
-            trackManager = new TrackManager(player, messageChannel);
-
-            player.addListener(trackManager);
-            manager.setSendingHandler(new AudioPlayerSendHandler(player));
-            manager.openAudioConnection(voiceChannel);
-
-            Bot.trackScheduerMap.put(voiceChannel, trackManager);
-        }
+        GuildMusicPlayer musicPlayer = GuildMusicPlayers.getGuildAudioPlayer(guild, messageChannel, manager.getConnectedChannel(), voiceChannel);
 
         playerManager.loadItem(identifier, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                trackManager.queue(track);
+                musicPlayer.queue(track);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 for (AudioTrack track : playlist.getTracks()) {
-                    trackManager.queue(track);
+                    musicPlayer.queue(track);
                 }
             }
 

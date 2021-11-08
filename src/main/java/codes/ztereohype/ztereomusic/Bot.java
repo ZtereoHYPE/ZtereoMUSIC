@@ -1,6 +1,6 @@
 package codes.ztereohype.ztereomusic;
 
-import codes.ztereohype.ztereomusic.audio.TrackManager;
+import codes.ztereohype.ztereomusic.audio.GuildMusicPlayer;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.commands.Ping;
 import codes.ztereohype.ztereomusic.command.commands.Play;
@@ -13,10 +13,12 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static net.dv8tion.jda.api.requests.GatewayIntent.GUILD_MESSAGES;
+import static net.dv8tion.jda.api.requests.GatewayIntent.GUILD_VOICE_STATES;
 
 public class Bot {
     private static @Getter Config config;
@@ -26,14 +28,14 @@ public class Bot {
     private static @Getter final Map<String, String> commandAliases = new HashMap<>();
 
     public static AudioPlayerManager playerManager;
-    public static Map<VoiceChannel, TrackManager> trackScheduerMap = new HashMap<>();
+    public static Map<Long, GuildMusicPlayer> guildMusicPlayerMap = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         config = new Config("./config.json5");
-        bot = JDABuilder.createDefault(config.getPropreties().get("token")).build().awaitReady();
+        bot = JDABuilder.createDefault(config.getPropreties().get("token"), GUILD_MESSAGES, GUILD_VOICE_STATES).build().awaitReady();
 
-        setCommands();
         setupAudio();
+        setCommands();
         setListeners();
     }
 
@@ -48,9 +50,7 @@ public class Bot {
         commandMap.put(skip.getMeta().getName(), skip);
 
         for (String commandName : commandMap.keySet()) {
-            System.out.println("loading aliases from: " + commandName);
             for (String aliasName : commandMap.get(commandName).getMeta().getAliases()) {
-                System.out.println("loaded " + aliasName + " from command " + commandName);
                 commandAliases.put(aliasName, commandName);
             }
         }
@@ -59,6 +59,7 @@ public class Bot {
     public static void setupAudio() {
         playerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerRemoteSources(playerManager);
+        AudioSourceManagers.registerLocalSource(playerManager);
     }
 
     public static void setListeners() {

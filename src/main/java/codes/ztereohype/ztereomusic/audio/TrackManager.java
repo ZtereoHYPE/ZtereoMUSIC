@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TrackManager extends AudioEventAdapter {
     private final @Getter AudioPlayer player;
-    private final List<AudioTrack> trackQueue = new ArrayList<>();
+    public final List<AudioTrack> trackQueue = new ArrayList<>();
     private final MessageChannel infoChannel;
 
     public TrackManager(AudioPlayer player, MessageChannel infoChannel) {
@@ -22,20 +22,10 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     public void queue(AudioTrack track) {
-        // change this to add to queue and call onTrackEnd!
-        if (player.getPlayingTrack() == null) {
-            play(track);
-        } else {
-            trackQueue.add(track);
-            infoChannel.sendMessage("Queued " + track.getInfo().title);
-        }
+        trackQueue.add(track);
     }
 
-    private void play(AudioTrack track) {
-        player.playTrack(track);
-    }
-
-    private void playNext() {
+    public void playNext() {
         // if the player was playing a track (probably means it's a skip), stop it
         if (player.getPlayingTrack() != null) {
             player.stopTrack();
@@ -48,41 +38,27 @@ public class TrackManager extends AudioEventAdapter {
 
         AudioTrack nextTrack = trackQueue.get(0);
         trackQueue.remove(nextTrack);
-        play(nextTrack);
+        player.playTrack(nextTrack);
         infoChannel.sendMessage("Playing next track: " + nextTrack.getInfo().title).queue();
     }
 
-    public void pause() {
-        player.setPaused(true);
-    }
-
-    public void resume() {
-        player.setPaused(false);
-    }
-
-    public void skip() {
-        playNext();
-    }
+    @Override
+    public void onPlayerPause(AudioPlayer player) {}
 
     @Override
-    public void onPlayerPause(AudioPlayer player) {
-//        infoChannel.sendMessage("Pausing...").queue();
-    }
+    public void onPlayerResume(AudioPlayer player) {}
 
     @Override
-    public void onPlayerResume(AudioPlayer player) {
-//        infoChannel.sendMessage("Resuming...").queue();
-    }
-
-    @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {
-//        infoChannel.sendMessage("Starting track: " + track.getInfo().title).queue();
-    }
+    public void onTrackStart(AudioPlayer player, AudioTrack track) {}
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
             playNext();
+        }
+
+        if (endReason.equals(AudioTrackEndReason.CLEANUP)) {
+            // todo: leave the vc?
         }
 
         // endReason == FINISHED: A track finished or died by an exception (mayStartNext = true).
