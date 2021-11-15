@@ -1,5 +1,5 @@
 # ZtereoMUSIC
-### Is a discord music bot written in java using JDA. The name is prone to be changed in the future.
+#### A discord music bot written in java using JDA. The name is prone to be changed in the future.
 
 ## How to use:
 1. Run `./gradlew build` or your system's equivalent in this repo
