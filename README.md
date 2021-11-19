@@ -13,26 +13,30 @@
     ```
 4. Execute with your jvm of choice, requires java 16 for now.
 
-## To Dos:
-- Play command
-  - search on youtube for title and spotify songs.
-- Pause command
-- Skip command
-- Disconnect command
-- Help command
-- Queue commands:
-  - Queue to view the queue
-  - Queue remove [index] to remove an element
-  - Queue clear to clear queue
-- Toggleable permissions system based on DJ role and based on server
-- Ability to search the song name
-- Spotify URLs/playlists support
-- Fancy embeds for everything!
-- Slash commands? idk
-- Proper database for server preferences (prefix etc)
-- Various listeners if there's nobody in vc for a while or if it gets disconnected or if last disconnects (stop playin)
+## Roadmap:
+### First alpha:
+- [ ] Play command with search on YouTube for title.
+- [ ] Pause command
+- [ ] Skip command
+- [ ] Disconnect command 
+- [ ] Queue command to view queue
+- [ ] VoiceChecks class to check for tunable micro-permissions (eg. if someone in a different channel calls the bot, don't connect)
+- [ ] Various listeners if there's nobody in vc for a while or if it gets disconnected or if last disconnects (stop playin)
+
+### Second alpha:
+- [ ] Help command (on ping too)
+- [ ] Spotify URLs/playlists support (search on YouTube)
+- [ ] Queue remove [index] to remove an element
+- [ ] Queue clear to clear queue
+
+### Third+ alpha:
+- [ ] Toggleable permissions system based on DJ role and based on server
+- [ ] Ability to search the song name
+- [ ] Fancy embeds for everything!
+- [ ] Slash commands? 
+- [ ] Proper database for server preferences (prefix etc)
 - Other TBA...
 
 ## Thankies
 This wouldn't have been possible without the amazing folks behind [lavaplayer](https://github.com/sedmelluq/lavaplayer) and [JDA](https://github.com/DV8FromTheWorld/JDA).
-And without @ReperakDev and @FoxShadew. Thank you.
+And without ReperakDev and FoxShadew. Thank you.

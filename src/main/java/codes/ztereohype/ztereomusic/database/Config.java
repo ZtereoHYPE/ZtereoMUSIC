@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
-    private @Getter Map<String, String> propreties = new HashMap<>();
+    private @Getter final Map<String, String> propreties = new HashMap<>();
     private String path;
 
     public static Config loadFrom(String path) throws JsonSyntaxException, FileNotFoundException {
