@@ -1,8 +1,8 @@
 package codes.ztereohype.ztereomusic.command.commands;
 
 import codes.ztereohype.ztereomusic.ZtereoMUSIC;
-import codes.ztereohype.ztereomusic.audio.GuildMusicPlayer;
-import codes.ztereohype.ztereomusic.audio.GuildMusicPlayers;
+import codes.ztereohype.ztereomusic.audio.TrackManager;
+import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Play implements Command {
-    CommandMeta meta = new CommandMeta("play", "Play music!", new String[]{}, false, false);
+    CommandMeta meta = new CommandMeta("play", "Play music!", new String[]{"p"}, false, false);
 
     @Override
     public CommandMeta getMeta() {
@@ -62,18 +62,18 @@ public class Play implements Command {
             identifier = mergedArgs;
         }
 
-        GuildMusicPlayer musicPlayer = GuildMusicPlayers.getGuildAudioPlayer(guild, messageChannel, manager.getConnectedChannel(), voiceChannel);
+        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel, manager.getConnectedChannel(), voiceChannel);
 
         playerManager.loadItem(identifier, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                musicPlayer.queue(track);
+                trackManager.queue(track);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 for (AudioTrack track : playlist.getTracks()) {
-                    musicPlayer.queue(track);
+                    trackManager.queue(track);
                 }
             }
 

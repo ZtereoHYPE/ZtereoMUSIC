@@ -1,11 +1,13 @@
 package codes.ztereohype.ztereomusic.audio;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lombok.Getter;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
 import java.util.ArrayList;
@@ -15,17 +17,54 @@ public class TrackManager extends AudioEventAdapter {
     private final @Getter AudioPlayer player;
     public final List<AudioTrack> trackQueue = new ArrayList<>();
     private final MessageChannel infoChannel;
+    private final Guild guild;
 
-    public TrackManager(AudioPlayer player, MessageChannel infoChannel) {
-        this.player = player;
+    public TrackManager(AudioPlayerManager playerManager, MessageChannel infoChannel, Guild guild) {
+        this.player = playerManager.createPlayer();
         this.infoChannel = infoChannel;
+        this.guild = guild;
+
+        player.addListener(this);
+    }
+
+    public AudioPlayerSendHandler getAudioSendHandler() {
+        return new AudioPlayerSendHandler(this.player);
     }
 
     public void queue(AudioTrack track) {
-        trackQueue.add(track);
+        // change this to add to queue and call onTrackEnd!
+        if (player.getPlayingTrack() == null) {
+            player.playTrack(track);
+        } else {
+            trackQueue.add(track);
+            infoChannel.sendMessage("Queued " + track.getInfo().title).queue();
+        }
     }
 
-    public void playNext() {
+    public void clearQueue() {
+        trackQueue.clear();
+    }
+
+    public void pause() {
+        infoChannel.sendMessage("Pausing...").queue();
+        player.setPaused(true);
+    }
+
+    public void resume() {
+        infoChannel.sendMessage("Resuming...").queue();
+        player.setPaused(false);
+    }
+
+    public void skip() {
+        infoChannel.sendMessage("Skipping...").queue();
+        playNext();
+    }
+
+    public void stop() {
+        player.stopTrack();
+    }
+
+    private void playNext() {
         // if the player was playing a track (probably means it's a skip), stop it
         if (player.getPlayingTrack() != null) {
             player.stopTrack();
@@ -58,15 +97,14 @@ public class TrackManager extends AudioEventAdapter {
         }
 
         if (endReason.equals(AudioTrackEndReason.CLEANUP)) {
-            // todo: leave the vc?
+            TrackManagers.removeGuildTrackManager(guild);
         }
 
         // endReason == FINISHED: A track finished or died by an exception (mayStartNext = true).
         // endReason == LOAD_FAILED: Loading of a track failed (mayStartNext = true).
         // endReason == STOPPED: The player was stopped.
         // endReason == REPLACED: Another track started playing while this had not finished
-        // endReason == CLEANUP: Player hasn't been queried for a while, if you want you can put a
-        //                       clone of this back to your queue
+        // endReason == CLEANUP: Player hasn't been queried for a while, if you want you can put a clone of this back to your queue
     }
 
     @Override

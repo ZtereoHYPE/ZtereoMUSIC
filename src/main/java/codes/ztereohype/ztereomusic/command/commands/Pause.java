@@ -13,14 +13,15 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.Objects;
 
-public class Skip implements Command {
-    CommandMeta meta = new CommandMeta("skip", "Skip the current track!", new String[]{"next"}, false, false);
+public class Pause implements Command {
+    CommandMeta meta = new CommandMeta("pause", "Pause the playing music", new String[]{"resume"}, false, false);
 
     @Override
     public CommandMeta getMeta() {
         return this.meta;
     }
 
+    @Override
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Member author = Objects.requireNonNull(messageEvent.getMember());
 
@@ -31,10 +32,9 @@ public class Skip implements Command {
 
         // todo: make this part of a perms system (only people in same vc or vc at all have perms on music control)
         /* Note to self: Things to check before executing command
+            - if he's in vc
             - if we are in vc
             - if we are in the same vc
-            - if we are playing something
-            - if mr user has the goshdarn role
          */
         if (!author.getVoiceState().inVoiceChannel()) {
             messageEvent.getMessage().reply("You are not in a voice channel!").queue();
@@ -65,6 +65,10 @@ public class Skip implements Command {
             return;
         }
 
-        trackManager.skip();
+        if (trackManager.getPlayer().isPaused()) {
+            trackManager.resume();
+        } else {
+            trackManager.pause();
+        }
     }
 }

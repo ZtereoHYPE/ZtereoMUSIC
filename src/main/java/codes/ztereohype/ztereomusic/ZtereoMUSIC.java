@@ -1,7 +1,8 @@
 package codes.ztereohype.ztereomusic;
 
-import codes.ztereohype.ztereomusic.audio.GuildMusicPlayer;
+import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.command.Command;
+import codes.ztereohype.ztereomusic.command.commands.Pause;
 import codes.ztereohype.ztereomusic.command.commands.Ping;
 import codes.ztereohype.ztereomusic.command.commands.Play;
 import codes.ztereohype.ztereomusic.command.commands.Skip;
@@ -38,10 +39,9 @@ public class ZtereoMUSIC {
     private JDA jda;
 
     private AudioPlayerManager playerManager;
-    private Map<Long, GuildMusicPlayer> guildMusicPlayerMap = new HashMap<>();
+    private Map<Long, TrackManager> guildTrackManagerMap = new HashMap<>();
 
-    private ZtereoMUSIC() {
-    }
+    private ZtereoMUSIC() {}
 
     public static ZtereoMUSIC getInstance() {
         return ZtereoMUSIC.INSTANCE;
@@ -70,6 +70,9 @@ public class ZtereoMUSIC {
 
         Skip skip = new Skip();
         this.getCommandMap().put(skip.getMeta().getName(), skip);
+
+        Pause pause = new Pause();
+        this.getCommandMap().put(pause.getMeta().getName(), pause);
 
         for (String commandName : this.getCommandAliases().keySet()) {
             for (String aliasName : this.getCommandMap().get(commandName).getMeta().getAliases()) {
