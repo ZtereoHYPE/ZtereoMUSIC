@@ -35,6 +35,7 @@ public class TrackManager extends AudioEventAdapter {
         // change this to add to queue and call onTrackEnd!
         if (player.getPlayingTrack() == null) {
             player.playTrack(track);
+            infoChannel.sendMessage("Playing: " + track.getInfo().title).queue();
         } else {
             trackQueue.add(track);
             infoChannel.sendMessage("Queued " + track.getInfo().title).queue();
