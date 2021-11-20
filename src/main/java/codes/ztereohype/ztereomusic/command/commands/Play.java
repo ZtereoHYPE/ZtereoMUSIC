@@ -5,6 +5,7 @@ import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
+import codes.ztereohype.ztereomusic.networking.YoutubeSearch;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -14,6 +15,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,11 +54,16 @@ public class Play implements Command {
         Matcher matchedUrls = urlPattern.matcher(mergedArgs);
         boolean urlFound = matchedUrls.find();
 
+        // todo: clean up this bullshit try catch thing
         String identifier;
         if (!urlFound) {
             // youtube api shit
-            messageEvent.getMessage().reply("please send a youtube link").queue();
-            return;
+            try {
+                identifier = YoutubeSearch.getVideoUrl(mergedArgs);
+            } catch (IOException e) {
+                e.printStackTrace();
+                identifier = "error";
+            }
         } else {
             // set identifier to the parsed url
             identifier = mergedArgs;
