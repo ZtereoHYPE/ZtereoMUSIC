@@ -15,13 +15,14 @@
 
 ## Roadmap:
 ### First alpha:
-- [ ] Play command with search on YouTube for title.
-- [ ] Pause command
-- [ ] Skip command
+- [x] Play command with search on YouTube for title.
+- [x] Pause command
+- [x] Skip command
 - [ ] Disconnect command 
 - [ ] Queue command to view queue
 - [ ] VoiceChecks class to check for tunable micro-permissions (eg. if someone in a different channel calls the bot, don't connect)
 - [ ] Various listeners if there's nobody in vc for a while or if it gets disconnected or if last disconnects (stop playin)
+- [ ] Clean up todos and code!
 
 ### Second alpha:
 - [ ] Help command (on ping too)
