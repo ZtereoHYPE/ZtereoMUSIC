@@ -12,12 +12,14 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,15 +57,14 @@ public class Play implements Command {
         Matcher matchedUrls = urlPattern.matcher(mergedArgs);
         boolean urlFound = matchedUrls.find();
 
-        // todo: clean up this bullshit try catch thing
         String identifier;
         if (!urlFound) {
-            // youtube api shit
-            try {
-                identifier = YoutubeSearch.getVideoUrl(mergedArgs);
-            } catch (IOException e) {
-                e.printStackTrace();
-                identifier = "error";
+            Optional<String> query = YoutubeSearch.query(mergedArgs);
+            if (query.isPresent()) {
+                identifier = query.get();
+            } else {
+                messageEvent.getChannel().sendMessage("I found no matches for that song!").queue();
+                return;
             }
         } else {
             // set identifier to the parsed url

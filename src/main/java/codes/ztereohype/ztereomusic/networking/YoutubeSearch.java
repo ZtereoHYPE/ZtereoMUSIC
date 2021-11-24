@@ -10,32 +10,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 public class YoutubeSearch {
-    public static String getVideoUrl(String title) throws IOException {
-        String apiKey = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("yt_api_key");
-        String query;
+    private static final String API_KEY = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("yt_api_key");
+    private static final Json JSON = Json.json();
 
-        title = (title.contains(" ")) ? title.replace(" ","+") : title;
-        query = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=%22"+title+"%22&type=video&key="+apiKey;
+    public static Optional<String> query(String title) {
+        String query = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=%22"
+                + title.replace(' ', '+') + "%22&type=video&key=" + API_KEY;
 
-        // todo: add safety here, sounds a bit unsafe to me tbh but idk
-        InputStream inputStream = new URL(query).openStream();
-        String jsonResponse = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-
-        //todo: clean up this bullshit try/catch shit and error
-        Json json = Json.json();
-        JsonNode parsedResponse;
-        JsonPath path = JsonPath.parse("items[0].id.videoId");
-        String videoId;
+        String jsonResponse;
         try {
-            parsedResponse = json.parse(jsonResponse);
-            videoId = parsedResponse.query(path).asString();
+            jsonResponse = new String(new URL(query).openStream().readAllBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+        JsonPath path = JsonPath.parse("items[0].id.videoId");
+
+        try {
+            return Optional.ofNullable(JSON.parse(jsonResponse).query(path).asString());
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
-            videoId = "error";
+            return Optional.empty();
         }
-
-        return videoId;
     }
 }
