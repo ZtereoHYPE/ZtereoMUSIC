@@ -1,6 +1,7 @@
 package codes.ztereohype.ztereomusic.command.commands;
 
 import codes.ztereohype.ztereomusic.ZtereoMUSIC;
+import codes.ztereohype.ztereomusic.audio.CustomAudioLoadResultHandler;
 import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
@@ -71,28 +72,6 @@ public class Play implements Command {
 
         TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel, manager.getConnectedChannel(), voiceChannel);
 
-        playerManager.loadItem(identifier, new AudioLoadResultHandler() {
-            @Override
-            public void trackLoaded(AudioTrack track) {
-                trackManager.queue(track);
-            }
-
-            @Override
-            public void playlistLoaded(AudioPlaylist playlist) {
-                for (AudioTrack track : playlist.getTracks()) {
-                    trackManager.queue(track);
-                }
-            }
-
-            @Override
-            public void noMatches() {
-                messageEvent.getMessage().reply("I found no matches for that song!").queue();
-            }
-
-            @Override
-            public void loadFailed(FriendlyException throwable) {
-                messageEvent.getMessage().reply("everything blew up and died. i'm sorry.").queue();
-            }
-        });
+        playerManager.loadItem(identifier, new CustomAudioLoadResultHandler(trackManager, messageEvent));
     }
 }
