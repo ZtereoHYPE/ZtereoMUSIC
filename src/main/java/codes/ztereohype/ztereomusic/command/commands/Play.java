@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Play implements Command {
+    private static final Pattern URL_PATTERN = Pattern.compile("^(http|https)://([a-z]+\\.[a-z]+)+/\\S+$", Pattern.CASE_INSENSITIVE);
     CommandMeta meta = new CommandMeta("play", "Play music!", new String[]{"p"}, false, false);
 
     @Override
@@ -52,9 +53,7 @@ public class Play implements Command {
 
         // check if args merged are/have url, if so try to feed it into lava, else try to youtube api the fuck out of it.
         String mergedArgs = String.join(" ", args);
-
-        Pattern urlPattern = Pattern.compile("^(http|https)://([a-z]+\\.[a-z]+)+/\\S+$", Pattern.CASE_INSENSITIVE);
-        Matcher matchedUrls = urlPattern.matcher(mergedArgs);
+        Matcher matchedUrls = URL_PATTERN.matcher(mergedArgs);
         boolean urlFound = matchedUrls.find();
 
         String identifier;
