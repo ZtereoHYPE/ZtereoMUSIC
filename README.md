@@ -6,10 +6,10 @@
 2. Move `ZtereoMUSIC-0.0.1-all.jar` in a directory of your choice
 3. Create a `config.json5` file with the following structure:
    ```json5
-  {
-    token: "ODg4MTE5NTk4MDkwNjgyMzc4.YUOD1A.wgB8Na03TEzP0qPeXX3uv5N5eaY", 
-    prefix: "!"
-  }
+   {
+      token: "ODg4MTE5NTk4MDkwNjgyMzc4.YUOD1A.wgB8Na03TEzP0qPeXX3uv5N5eaY", 
+      prefix: "!"
+   }
     ```
 4. Execute with your jvm of choice, requires java 16 for now.
 
