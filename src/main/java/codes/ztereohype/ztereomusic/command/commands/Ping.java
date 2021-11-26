@@ -5,7 +5,17 @@ import codes.ztereohype.ztereomusic.command.CommandMeta;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Ping implements Command {
-    CommandMeta meta = new CommandMeta("ping", "A command to get pinged", new String[]{"pong", "pog"}, false, false);
+    private final CommandMeta meta;
+
+    public Ping() {
+        this.meta = CommandMeta.builder()
+                               .name("ping")
+                               .description("A command to get pinged")
+                               .aliases(new String[] { "pong", "pog" })
+                               .isNsfw(false)
+                               .isHidden(false)
+                               .build();
+    }
 
     @Override
     public CommandMeta getMeta() {

@@ -14,7 +14,17 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import java.util.Objects;
 
 public class Pause implements Command {
-    CommandMeta meta = new CommandMeta("pause", "Pause the playing music", new String[]{"resume"}, false, false);
+    private final CommandMeta meta;
+
+    public Pause() {
+        this.meta = CommandMeta.builder()
+                               .name("pause")
+                               .description("Pause the playing music")
+                               .aliases(new String[] { "resume" })
+                               .isNsfw(false)
+                               .isHidden(false)
+                               .build();
+    }
 
     @Override
     public CommandMeta getMeta() {

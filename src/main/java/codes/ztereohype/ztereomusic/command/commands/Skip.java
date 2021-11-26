@@ -14,7 +14,17 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import java.util.Objects;
 
 public class Skip implements Command {
-    CommandMeta meta = new CommandMeta("skip", "Skip the current track!", new String[]{"next"}, false, false);
+    private final CommandMeta meta;
+
+    public Skip() {
+        this.meta = CommandMeta.builder()
+                               .name("skip")
+                               .description("Skip the current track!")
+                               .aliases(new String[] { "next" })
+                               .isNsfw(false)
+                               .isHidden(false)
+                               .build();
+    }
 
     @Override
     public CommandMeta getMeta() {
