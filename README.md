@@ -6,10 +6,11 @@
 2. Move `ZtereoMUSIC-0.0.1-all.jar` in a directory of your choice
 3. Create a `config.json5` file with the following structure:
    ```json5
-   {
-      token: "ODg4MTE5NTk4MDkwNjgyMzc4.YUOD1A.wgB8Na03TEzP0qPeXX3uv5N5eaY", 
-      prefix: "!"
-   }
+    {
+        token: "ODg4MTE5NTk4MDkwNjgyMzc4.YUOD1A.wgB8Na03TEzP0qPeXX3uv5N5eaY", 
+        prefix: "!"
+        yt_api_key: "djasfhjasdhHOUIHIDhdi_oHIUShPIUAHSF",
+    }
     ```
 4. Execute with your jvm of choice, requires java 16 for now.
 
@@ -18,25 +19,34 @@
 - [x] Play command with search on YouTube for title.
 - [x] Pause command
 - [x] Skip command
-- [ ] Disconnect command 
-- [ ] Queue command to view queue
-- [ ] VoiceChecks class to check for tunable micro-permissions (eg. if someone in a different channel calls the bot, don't connect)
-- [ ] Various listeners if there's nobody in vc for a while or if it gets disconnected or if last disconnects (stop playin)
+- [x] Disconnect command
+- [x] Queue command to view queue (half assed lol)
+- [ ] Remove [index] to remove an element
+- [ ] Clear to clear queue
 - [ ] Clean up todos and code!
 
 ### Second alpha:
+- [ ] Fancy embeds for everything!
+- [x] VoiceChecks class to check for tunable micro-permissions (eg. if someone in a different channel calls the bot, don't connect)
+- [ ] Various listeners if there's nobody in vc for a while or if it gets disconnected or if last disconnects (stop playin) (very important as cleanup doesnt always get called)
 - [ ] Help command (on ping too)
 - [ ] Spotify URLs/playlists support (search on YouTube)
-- [ ] Queue remove [index] to remove an element
-- [ ] Queue clear to clear queue
+- [ ] When a track fails try to play it again and if that fails send the error message.
 
-### Third+ alpha:
+### Later:
 - [ ] Toggleable permissions system based on DJ role and based on server
+- [ ] fast forward command
 - [ ] Ability to search the song name
-- [ ] Fancy embeds for everything!
 - [ ] Slash commands? 
 - [ ] Proper database for server preferences (prefix etc)
 - Other TBA...
+
+## Noticed problems:
+- The bot will always use the same channel (infochannel) after the first command which makes it behave strangely if you switch text chat after the first channel.
+- Uh oh a track did something strange appears sometimes... (last time was when asking for a track in another channel)
+- The bot randomly disconnects from the vc
+- Queue index starts from 0
+- Sometimes the bot stops showing the green outline (maybe client bug, very rare)
 
 ## Thankies
 This wouldn't have been possible without the amazing folks behind [lavaplayer](https://github.com/sedmelluq/lavaplayer) and [JDA](https://github.com/DV8FromTheWorld/JDA).

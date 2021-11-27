@@ -6,6 +6,7 @@ import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
+import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import codes.ztereohype.ztereomusic.networking.YoutubeSearch;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -35,6 +36,8 @@ public class Play implements Command {
                                .aliases(new String[] { "p" })
                                .isNsfw(false)
                                .isHidden(false)
+                               .checks(new VoiceChecks[] { VoiceChecks.USER_CONNECTED,
+                                                           VoiceChecks.SAME_VC_IF_CONNECTED })
                                .build();
     }
 
@@ -46,18 +49,8 @@ public class Play implements Command {
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Member author = Objects.requireNonNull(messageEvent.getMember());
 
-        if (author.getVoiceState() == null) {
-            messageEvent.getChannel().sendMessage("I was unable to access your information... strange...").queue();
-            return;
-        }
-
-        if (!author.getVoiceState().inVoiceChannel()) {
-            messageEvent.getMessage().reply("You are not in a voice channel!").queue();
-            return;
-        }
-
         Guild guild = messageEvent.getGuild();
-        VoiceChannel voiceChannel = author.getVoiceState().getChannel();
+        VoiceChannel voiceChannel = Objects.requireNonNull(author.getVoiceState()).getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
         AudioManager manager = guild.getAudioManager();
         AudioPlayerManager playerManager = ZtereoMUSIC.getInstance().getPlayerManager();

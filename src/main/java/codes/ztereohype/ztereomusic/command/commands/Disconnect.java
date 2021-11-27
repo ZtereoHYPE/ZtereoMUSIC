@@ -1,5 +1,6 @@
 package codes.ztereohype.ztereomusic.command.commands;
 
+import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
@@ -7,19 +8,19 @@ import codes.ztereohype.ztereomusic.command.CommandMeta;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.managers.AudioManager;
 
-public class Pause implements Command {
+public class Disconnect implements Command {
     private final CommandMeta meta;
 
-    public Pause() {
+    public Disconnect() {
         this.meta = CommandMeta.builder()
-                               .name("pause")
-                               .description("Pause the playing music")
-                               .aliases(new String[] { "resume" })
+                               .name("disconnect")
+                               .description("A command to kick the bot from the vc.")
+                               .aliases(new String[] { "fuckoff", "bye" })
                                .isNsfw(false)
                                .isHidden(false)
                                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                                           VoiceChecks.BOT_PLAYING,
                                                            VoiceChecks.USER_CONNECTED,
                                                            VoiceChecks.SAME_VC_IF_CONNECTED })
                                .build();
@@ -30,16 +31,17 @@ public class Pause implements Command {
         return this.meta;
     }
 
-    @Override
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
-        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild);
+        AudioManager audioManager = guild.getAudioManager();
 
-        assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks
-        if (trackManager.getPlayer().isPaused()) {
-            trackManager.resume();
-        } else {
-            trackManager.pause();
+        TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guild.getIdLong());
+
+        if (trackManager == null) {
+            audioManager.closeAudioConnection();
+            return;
         }
+
+        TrackManagers.removeGuildTrackManager(guild);
     }
 }

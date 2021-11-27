@@ -1,10 +1,18 @@
 package codes.ztereohype.ztereomusic.listeners;
 
 import codes.ztereohype.ztereomusic.ZtereoMUSIC;
+import codes.ztereohype.ztereomusic.audio.TrackManager;
+import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
+import codes.ztereohype.ztereomusic.command.permissions.Check;
+import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -20,6 +28,7 @@ public class CommandListener extends ListenerAdapter {
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         Message message = event.getMessage();
         String content = message.getContentRaw();
+        Guild guild = message.getGuild();
 
         // ignore messages from bots, dms, and that don't start with the prefix
         if (!content.startsWith(PREFIX)) return;
@@ -39,6 +48,14 @@ public class CommandListener extends ListenerAdapter {
             command = COMMAND_MAP.get(COMMAND_ALIASES.get(commandName));
         } else {
             return;
+        }
+
+        // check if the command is allowed and stop at first failure (order is important)
+        for (VoiceChecks checkEnum : command.getMeta().getChecks()) {
+            if (!checkEnum.getCheck().getResult(message.getMember(), guild.getAudioManager().getConnectedChannel(), TrackManagers.getGuildTrackManager(guild))) {
+                message.reply(checkEnum.getCheck().getErrorCode()).queue();
+                return;
+            }
         }
 
         // try to execute the command

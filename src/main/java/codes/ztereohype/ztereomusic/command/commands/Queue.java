@@ -1,29 +1,31 @@
 package codes.ztereohype.ztereomusic.command.commands;
 
+import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
-public class Skip implements Command {
+import java.util.List;
+import java.util.Objects;
+
+public class Queue implements Command {
     private final CommandMeta meta;
 
-    public Skip() {
+    public Queue() {
         this.meta = CommandMeta.builder()
-                               .name("skip")
-                               .description("Skip the current track!")
-                               .aliases(new String[] { "next" })
+                               .name("queue")
+                               .description("See the queue")
+                               .aliases(new String[] { "q" })
                                .isNsfw(false)
                                .isHidden(false)
                                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                                           VoiceChecks.BOT_PLAYING,
                                                            VoiceChecks.USER_CONNECTED,
                                                            VoiceChecks.SAME_VC_IF_CONNECTED })
                                .build();
@@ -36,15 +38,25 @@ public class Skip implements Command {
 
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
+        VoiceChannel voiceChannel = Objects.requireNonNull(Objects.requireNonNull(messageEvent.getMember()).getVoiceState()).getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
-        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild);
+        VoiceChannel connectedChannel = guild.getAudioManager().getConnectedChannel();
 
-        assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks (BOT_PLAYING)
-        if (trackManager.getPlayer().getPlayingTrack() == null) {
-            messageChannel.sendMessage("I am not even playing anything!").queue();
-            return;
+        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel, connectedChannel, voiceChannel);
+
+        StringBuilder messageBuilder = new StringBuilder();
+        List<AudioTrack> trackList = trackManager.trackQueue;
+        for (AudioTrack track: trackList) {
+            messageBuilder.append(trackList.indexOf(track)).append(". ");
+            messageBuilder.append(track.getInfo().title);
+            messageBuilder.append(System.getProperty("line.separator"));
         }
 
-        trackManager.skip();
+        if (messageBuilder.length() == 0) {
+            messageBuilder.append("There are no items in queue");
+        }
+
+        messageChannel.sendMessage(messageBuilder.toString()).queue();
     }
+
 }

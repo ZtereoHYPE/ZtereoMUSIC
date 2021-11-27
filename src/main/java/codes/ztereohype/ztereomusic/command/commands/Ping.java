@@ -2,6 +2,7 @@ package codes.ztereohype.ztereomusic.command.commands;
 
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
+import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Ping implements Command {
@@ -14,6 +15,7 @@ public class Ping implements Command {
                                .aliases(new String[] { "pong", "pog" })
                                .isNsfw(false)
                                .isHidden(false)
+                               .checks(new VoiceChecks[0])
                                .build();
     }
 

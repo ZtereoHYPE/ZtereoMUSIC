@@ -2,10 +2,7 @@ package codes.ztereohype.ztereomusic;
 
 import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.command.Command;
-import codes.ztereohype.ztereomusic.command.commands.Pause;
-import codes.ztereohype.ztereomusic.command.commands.Ping;
-import codes.ztereohype.ztereomusic.command.commands.Play;
-import codes.ztereohype.ztereomusic.command.commands.Skip;
+import codes.ztereohype.ztereomusic.command.commands.*;
 import codes.ztereohype.ztereomusic.database.Config;
 import codes.ztereohype.ztereomusic.listeners.CommandListener;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -74,8 +71,15 @@ public class ZtereoMUSIC {
         Pause pause = new Pause();
         this.getCommandMap().put(pause.getMeta().getName(), pause);
 
-        for (String commandName : this.getCommandAliases().keySet()) {
+        Disconnect disconnect = new Disconnect();
+        this.getCommandMap().put(disconnect.getMeta().getName(), disconnect);
+
+        Queue queue = new Queue();
+        this.getCommandMap().put(queue.getMeta().getName(), queue);
+
+        for (String commandName : this.getCommandMap().keySet()) {
             for (String aliasName : this.getCommandMap().get(commandName).getMeta().getAliases()) {
+                System.out.println("Loaded alias \"" + aliasName + "\" for command: " + commandName);
                 this.getCommandAliases().put(aliasName, commandName);
             }
         }
