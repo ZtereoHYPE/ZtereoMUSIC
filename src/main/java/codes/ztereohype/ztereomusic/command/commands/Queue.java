@@ -16,7 +16,20 @@ import java.util.List;
 import java.util.Objects;
 
 public class Queue implements Command {
-    CommandMeta meta = new CommandMeta("queue", "See the queue", new String[]{"q"}, false, false, new VoiceChecks[]{ VoiceChecks.BOT_CONNECTED, VoiceChecks.USER_CONNECTED, VoiceChecks.SAME_VC_IF_CONNECTED });
+    private final CommandMeta meta;
+
+    public Queue() {
+        this.meta = CommandMeta.builder()
+                               .name("queue")
+                               .description("See the queue")
+                               .aliases(new String[] { "q" })
+                               .isNsfw(false)
+                               .isHidden(false)
+                               .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                                           VoiceChecks.USER_CONNECTED,
+                                                           VoiceChecks.SAME_VC_IF_CONNECTED })
+                               .build();
+    }
 
     @Override
     public CommandMeta getMeta() {

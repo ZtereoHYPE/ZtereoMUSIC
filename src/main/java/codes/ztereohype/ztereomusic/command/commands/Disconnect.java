@@ -11,7 +11,20 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Disconnect implements Command {
-    CommandMeta meta = new CommandMeta("disconnect", "A command to kick the bot from the vc.", new String[]{"fuckoff", "bye"}, false, false, new VoiceChecks[]{ VoiceChecks.BOT_CONNECTED, VoiceChecks.USER_CONNECTED, VoiceChecks.SAME_VC_IF_CONNECTED });
+    private final CommandMeta meta;
+
+    public Disconnect() {
+        this.meta = CommandMeta.builder()
+                               .name("disconnect")
+                               .description("A command to kick the bot from the vc.")
+                               .aliases(new String[] { "fuckoff", "bye" })
+                               .isNsfw(false)
+                               .isHidden(false)
+                               .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                                           VoiceChecks.USER_CONNECTED,
+                                                           VoiceChecks.SAME_VC_IF_CONNECTED })
+                               .build();
+    }
 
     @Override
     public CommandMeta getMeta() {

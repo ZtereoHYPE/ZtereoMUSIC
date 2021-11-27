@@ -6,7 +6,18 @@ import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Ping implements Command {
-    CommandMeta meta = new CommandMeta("ping", "A command to get pinged", new String[]{"pong", "pog"}, false, false, new VoiceChecks[]{});
+    private final CommandMeta meta;
+
+    public Ping() {
+        this.meta = CommandMeta.builder()
+                               .name("ping")
+                               .description("A command to get pinged")
+                               .aliases(new String[] { "pong", "pog" })
+                               .isNsfw(false)
+                               .isHidden(false)
+                               .checks(new VoiceChecks[0])
+                               .build();
+    }
 
     @Override
     public CommandMeta getMeta() {

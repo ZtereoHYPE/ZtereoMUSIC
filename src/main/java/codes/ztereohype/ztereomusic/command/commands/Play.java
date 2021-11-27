@@ -26,7 +26,20 @@ import java.util.regex.Pattern;
 
 public class Play implements Command {
     private static final Pattern URL_PATTERN = Pattern.compile("^(http|https)://([a-z]+\\.[a-z]+)+/\\S+$", Pattern.CASE_INSENSITIVE);
-    CommandMeta meta = new CommandMeta("play", "Play music!", new String[]{"p"}, false, false, new VoiceChecks[]{ VoiceChecks.USER_CONNECTED, VoiceChecks.SAME_VC_IF_CONNECTED });
+
+    private final CommandMeta meta;
+
+    public Play() {
+        this.meta = CommandMeta.builder()
+                               .name("play")
+                               .description("Play music!")
+                               .aliases(new String[] { "p" })
+                               .isNsfw(false)
+                               .isHidden(false)
+                               .checks(new VoiceChecks[] { VoiceChecks.USER_CONNECTED,
+                                                           VoiceChecks.SAME_VC_IF_CONNECTED })
+                               .build();
+    }
 
     @Override
     public CommandMeta getMeta() {

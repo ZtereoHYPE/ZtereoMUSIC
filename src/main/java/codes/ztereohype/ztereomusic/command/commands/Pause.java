@@ -9,7 +9,21 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Pause implements Command {
-    CommandMeta meta = new CommandMeta("pause", "Pause the playing music", new String[]{"resume"}, false, false, new VoiceChecks[]{ VoiceChecks.BOT_CONNECTED, VoiceChecks.BOT_PLAYING, VoiceChecks.USER_CONNECTED, VoiceChecks.SAME_VC_IF_CONNECTED });
+    private final CommandMeta meta;
+
+    public Pause() {
+        this.meta = CommandMeta.builder()
+                               .name("pause")
+                               .description("Pause the playing music")
+                               .aliases(new String[] { "resume" })
+                               .isNsfw(false)
+                               .isHidden(false)
+                               .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                                           VoiceChecks.BOT_PLAYING,
+                                                           VoiceChecks.USER_CONNECTED,
+                                                           VoiceChecks.SAME_VC_IF_CONNECTED })
+                               .build();
+    }
 
     @Override
     public CommandMeta getMeta() {
