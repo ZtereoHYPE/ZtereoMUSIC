@@ -25,11 +25,14 @@ public class YoutubeSearch {
             return Optional.empty();
         }
 
-        JsonPath path = JsonPath.parse("items[0].id.videoId");
+        JsonPath resultsNumberPath = JsonPath.parse("pageInfo.totalResults");
+        JsonPath videoPath = JsonPath.parse("items[0].id.videoId");
 
-        //todo: actually check if there is a response before parsing directly to the response + get the music-related one with most views
         try {
-            return Optional.ofNullable(JSON.parse(jsonResponse).query(path).asString());
+            int results = JSON.parse(jsonResponse).query(resultsNumberPath).asInt();
+            if (results == 0) return Optional.empty();
+
+            return Optional.ofNullable(JSON.parse(jsonResponse).query(videoPath).asString());
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
             return Optional.empty();
