@@ -1,6 +1,5 @@
 package codes.ztereohype.ztereomusic.command.commands;
 
-import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
@@ -40,14 +39,13 @@ public class Queue implements Command {
         Guild guild = messageEvent.getGuild();
         VoiceChannel voiceChannel = Objects.requireNonNull(Objects.requireNonNull(messageEvent.getMember()).getVoiceState()).getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
-        VoiceChannel connectedChannel = guild.getAudioManager().getConnectedChannel();
 
-        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel, connectedChannel, voiceChannel);
+        TrackManager trackManager = TrackManagers.getOrCreateGuildTrackManager(guild, messageChannel, voiceChannel);
 
         StringBuilder messageBuilder = new StringBuilder();
         List<AudioTrack> trackList = trackManager.trackQueue;
         for (AudioTrack track: trackList) {
-            messageBuilder.append(trackList.indexOf(track)).append(". ");
+            messageBuilder.append(trackList.indexOf(track) + 1).append(". ");
             messageBuilder.append(track.getInfo().title);
             messageBuilder.append(System.getProperty("line.separator"));
         }

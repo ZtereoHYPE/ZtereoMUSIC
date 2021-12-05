@@ -6,11 +6,12 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class TrackManagers {
-    //todo: change to a statement that only returns a trackmanager if it exists and overload it to accept various things eg guild but also vc or infoMessage channel
-    public static TrackManager getGuildTrackManager(Guild guild) {
+    @Nullable
+    public static TrackManager getGuildTrackManager(Guild guild, MessageChannel infoChannel) {
         long guildId = guild.getIdLong();
 
         TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guildId);
@@ -19,21 +20,15 @@ public class TrackManagers {
             return null;
         }
 
+        trackManager.setInfoChannel(infoChannel);
+
         guild.getAudioManager().setSendingHandler(trackManager.getAudioSendHandler());
 
         return trackManager;
     }
 
-    //todo: rename to getOrCreateGuildTrackManager
-    public static TrackManager getGuildTrackManager(Guild guild, MessageChannel infoChannel, VoiceChannel connectedChannel, VoiceChannel requestedChannel) {
+    public static TrackManager getOrCreateGuildTrackManager(Guild guild, MessageChannel infoChannel, VoiceChannel requestedChannel) {
         long guildId = guild.getIdLong();
-        boolean isInSameVC = Objects.equals(connectedChannel, requestedChannel);
-
-        // If I get called in a different vc I delete the old manager
-        //todo: move this check to the audio micropermissions and handle it there
-        if (!isInSameVC) {
-            ZtereoMUSIC.getInstance().getGuildTrackManagerMap().remove(guildId);
-        }
 
         TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guildId);
 
@@ -42,6 +37,8 @@ public class TrackManagers {
             ZtereoMUSIC.getInstance().getGuildTrackManagerMap().put(guildId, trackManager);
             guild.getAudioManager().openAudioConnection(requestedChannel);
         }
+
+        trackManager.setInfoChannel(infoChannel);
 
         guild.getAudioManager().setSendingHandler(trackManager.getAudioSendHandler());
 

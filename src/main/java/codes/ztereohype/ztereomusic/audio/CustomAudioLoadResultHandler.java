@@ -4,15 +4,18 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CustomAudioLoadResultHandler implements AudioLoadResultHandler {
     private final TrackManager trackManager;
-    private final MessageReceivedEvent messageEvent;
+    private final MessageChannel messageChannel;
 
-    public CustomAudioLoadResultHandler(TrackManager trackManager, MessageReceivedEvent messageEvent) {
+    public CustomAudioLoadResultHandler(TrackManager trackManager, MessageChannel messageChannel) {
         this.trackManager = trackManager;
-        this.messageEvent = messageEvent;
+        this.messageChannel = messageChannel;
+        trackManager.setInfoChannel(messageChannel);
     }
 
     @Override
@@ -29,12 +32,12 @@ public class CustomAudioLoadResultHandler implements AudioLoadResultHandler {
 
     @Override
     public void noMatches() {
-        this.messageEvent.getMessage().reply("I found no matches for that song!").queue();
+        this.messageChannel.sendMessage("I found no matches for that song!").queue();
     }
 
     @Override
     public void loadFailed(FriendlyException throwable) {
-        this.messageEvent.getMessage().reply("everything blew up and died. i'm sorry.").queue();
+        this.messageChannel.sendMessage("everything blew up and died. i'm sorry.").queue();
     }
 }
 

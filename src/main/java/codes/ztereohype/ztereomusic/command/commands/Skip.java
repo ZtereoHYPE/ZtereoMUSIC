@@ -37,7 +37,7 @@ public class Skip implements Command {
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
         MessageChannel messageChannel = messageEvent.getChannel();
-        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild);
+        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);
 
         assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks (BOT_PLAYING)
         if (trackManager.getPlayer().getPlayingTrack() == null) {

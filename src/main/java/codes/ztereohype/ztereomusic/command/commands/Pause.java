@@ -6,6 +6,7 @@ import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Pause implements Command {
@@ -33,7 +34,8 @@ public class Pause implements Command {
     @Override
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
-        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild);
+        MessageChannel messageChannel = messageEvent.getChannel();
+        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);
 
         assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks
         if (trackManager.getPlayer().isPaused()) {

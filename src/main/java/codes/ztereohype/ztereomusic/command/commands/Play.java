@@ -8,17 +8,11 @@ import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import codes.ztereohype.ztereomusic.networking.YoutubeSearch;
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -74,8 +68,8 @@ public class Play implements Command {
             identifier = mergedArgs;
         }
 
-        TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel, manager.getConnectedChannel(), voiceChannel);
+        TrackManager trackManager = TrackManagers.getOrCreateGuildTrackManager(guild, messageChannel, voiceChannel);
 
-        playerManager.loadItem(identifier, new CustomAudioLoadResultHandler(trackManager, messageEvent));
+        playerManager.loadItem(identifier, new CustomAudioLoadResultHandler(trackManager, messageChannel));
     }
 }

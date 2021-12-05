@@ -6,10 +6,7 @@ import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.permissions.Check;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -27,6 +24,7 @@ public class CommandListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         Message message = event.getMessage();
+        MessageChannel messageChannel = event.getChannel();
         String content = message.getContentRaw();
         Guild guild = message.getGuild();
 
@@ -52,7 +50,7 @@ public class CommandListener extends ListenerAdapter {
 
         // check if the command is allowed and stop at first failure (order is important)
         for (VoiceChecks checkEnum : command.getMeta().getChecks()) {
-            if (!checkEnum.getCheck().getResult(message.getMember(), guild.getAudioManager().getConnectedChannel(), TrackManagers.getGuildTrackManager(guild))) {
+            if (!checkEnum.getCheck().getResult(message.getMember(), guild.getAudioManager().getConnectedChannel(), TrackManagers.getGuildTrackManager(guild, messageChannel))) {
                 message.reply(checkEnum.getCheck().getErrorCode()).queue();
                 return;
             }
