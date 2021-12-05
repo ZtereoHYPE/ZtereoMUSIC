@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
@@ -16,8 +17,9 @@ import java.util.List;
 public class TrackManager extends AudioEventAdapter {
     private final @Getter AudioPlayer player;
     public final List<AudioTrack> trackQueue = new ArrayList<>();
-    private final MessageChannel infoChannel;
+    private @Getter @Setter MessageChannel infoChannel;
     private final Guild guild;
+    private boolean trackHasErrored = false; // this is a temporary workaround that helps me debug stuff. will be removed.
 
     public TrackManager(AudioPlayerManager playerManager, MessageChannel infoChannel, Guild guild) {
         this.player = playerManager.createPlayer();
@@ -110,9 +112,16 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-        infoChannel.sendMessage("Uh oh, a track did something strange. Skipping...").queue();
-        trackQueue.remove(track);
-        playNext();
+        System.out.println(exception.getMessage());
+
+        if (!trackHasErrored) {
+            infoChannel.sendMessage("Uh oh, a track did something strange. The error was: " + exception.getMessage() + ". Trying to replay...").queue();
+            player.playTrack(track);
+        } else {
+            infoChannel.sendMessage("The error happened again. Skipping...").queue();
+            playNext();
+        }
+        trackHasErrored = !trackHasErrored;
     }
 
     @Override

@@ -41,13 +41,6 @@
 - [ ] Proper database for server preferences (prefix etc)
 - Other TBA...
 
-## Noticed problems:
-- The bot will always use the same channel (infochannel) after the first command which makes it behave strangely if you switch text chat after the first channel.
-- Uh oh a track did something strange appears sometimes... (last time was when asking for a track in another channel)
-- The bot randomly disconnects from the vc
-- Queue index starts from 0
-- Sometimes the bot stops showing the green outline (maybe client bug, very rare)
-
 ## Thankies
 This wouldn't have been possible without the amazing folks behind [lavaplayer](https://github.com/sedmelluq/lavaplayer) and [JDA](https://github.com/DV8FromTheWorld/JDA).
 And without ReperakDev and FoxShadew. Thank you.
