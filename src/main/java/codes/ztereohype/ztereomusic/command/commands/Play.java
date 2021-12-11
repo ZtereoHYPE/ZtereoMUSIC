@@ -46,10 +46,21 @@ public class Play implements Command {
         Guild guild = messageEvent.getGuild();
         VoiceChannel voiceChannel = Objects.requireNonNull(author.getVoiceState()).getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
-        AudioManager manager = guild.getAudioManager();
         AudioPlayerManager playerManager = ZtereoMUSIC.getInstance().getPlayerManager();
 
-        // check if args merged are/have url, if so try to feed it into lava, else try to youtube api the fuck out of it.
+        // if there are no args use as play/pause
+        if (args.length == 0) {
+            TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);
+
+            if (trackManager == null || !trackManager.getPlayer().isPaused()) {
+                messageChannel.sendMessage("What should I play? Type the name of the song after the command or use a YouTube link!").queue();
+                return;
+            }
+
+            trackManager.resume();
+            return;
+        }
+
         String mergedArgs = String.join(" ", args);
         Matcher matchedUrls = URL_PATTERN.matcher(mergedArgs);
         boolean urlFound = matchedUrls.find();
