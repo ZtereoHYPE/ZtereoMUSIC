@@ -8,7 +8,7 @@
    ```json5
     {
         token: "ODg4MTE5NTk4MDkwNjgyMzc4.YUOD1A.wgB8Na03TEzP0qPeXX3uv5N5eaY", 
-        prefix: "!"
+        prefix: "!",
         yt_api_key: "djasfhjasdhHOUIHIDhdi_oHIUShPIUAHSF",
     }
     ```
