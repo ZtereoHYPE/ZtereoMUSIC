@@ -33,15 +33,6 @@ public class Disconnect implements Command {
 
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
-        AudioManager audioManager = guild.getAudioManager();
-
-        TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guild.getIdLong());
-
-        if (trackManager == null) {
-            audioManager.closeAudioConnection();
-            return;
-        }
-
         TrackManagers.removeGuildTrackManager(guild);
     }
 }
