@@ -5,11 +5,13 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class TrackManagers {
+    //todo: separate infochannel setting from creation or getting, maybe remove guildtrackmanager should accept a tracc manager?
     @Nullable
     public static TrackManager getGuildTrackManager(Guild guild, MessageChannel infoChannel) {
         long guildId = guild.getIdLong();
@@ -20,7 +22,7 @@ public class TrackManagers {
             return null;
         }
 
-        trackManager.setInfoChannel(infoChannel);
+        if (infoChannel != null) trackManager.setInfoChannel(infoChannel);
 
         guild.getAudioManager().setSendingHandler(trackManager.getAudioSendHandler());
 
@@ -48,14 +50,14 @@ public class TrackManagers {
     // stops player, disconnects from vc, and deletes the wrapper
     public static void removeGuildTrackManager(Guild guild) {
         long guildId = guild.getIdLong();
+        AudioManager audioManager = guild.getAudioManager();
         TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guildId);
+
+        audioManager.closeAudioConnection();
 
         if (trackManager == null) return;
 
         trackManager.stop();
-        guild.getAudioManager().closeAudioConnection();
-
-        //todo: remove this when will be part of disconnection listener y fa fere ts tts sad
         ZtereoMUSIC.getInstance().getGuildTrackManagerMap().remove(guildId);
     }
 }
