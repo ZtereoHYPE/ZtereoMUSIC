@@ -5,6 +5,7 @@ import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.commands.*;
 import codes.ztereohype.ztereomusic.database.Config;
 import codes.ztereohype.ztereomusic.listeners.CommandListener;
+import codes.ztereohype.ztereomusic.listeners.vcLeaveListener;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -14,10 +15,13 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.shadew.json.JsonSyntaxException;
 
 import javax.security.auth.login.LoginException;
 import java.io.FileNotFoundException;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,9 +53,15 @@ public class ZtereoMUSIC {
     public static void main(String[] args) {
         ZtereoMUSIC ztereoMUSIC = ZtereoMUSIC.getInstance();
 
+        EnumSet<GatewayIntent> intents = EnumSet.of(
+                GatewayIntent.GUILD_MESSAGES,
+                GatewayIntent.GUILD_VOICE_STATES
+        );
+
         ztereoMUSIC.setConfig(Config.loadFrom("./config.json5"));
-        ztereoMUSIC.setJda(JDABuilder.createDefault(ztereoMUSIC.getConfig().getPropreties().get("token"), GUILD_MESSAGES,
-                                                    GUILD_VOICE_STATES).build().awaitReady());
+        ztereoMUSIC.setJda(JDABuilder.createDefault(ztereoMUSIC.getConfig().getPropreties().get("token"), intents)
+                                    .enableCache(CacheFlag.VOICE_STATE)
+                                    .build().awaitReady());
 
         ztereoMUSIC.setupAudio();
         ztereoMUSIC.setCommands();
@@ -93,5 +103,6 @@ public class ZtereoMUSIC {
 
     private void setListeners() {
         this.getJda().addEventListener(new CommandListener());
+        this.getJda().addEventListener(new vcLeaveListener());
     }
 }
