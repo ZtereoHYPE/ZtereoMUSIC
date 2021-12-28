@@ -9,9 +9,9 @@ import codes.ztereohype.ztereomusic.command.CommandMeta;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import codes.ztereohype.ztereomusic.networking.YoutubeSearch;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import lombok.Getter;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class Play implements Command {
     private static final Pattern URL_PATTERN = Pattern.compile("^(http|https)://([a-z]+\\.[a-z]+)+/\\S+$", Pattern.CASE_INSENSITIVE);
 
-    private final CommandMeta meta;
+    private @Getter final CommandMeta meta;
 
     public Play() {
         this.meta = CommandMeta.builder()
@@ -35,10 +35,10 @@ public class Play implements Command {
                                .build();
     }
 
-    @Override
-    public CommandMeta getMeta() {
-        return this.meta;
-    }
+//    @Override
+//    public CommandMeta getMeta() {
+//        return this.meta;
+//    }
 
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Member author = Objects.requireNonNull(messageEvent.getMember());
@@ -58,6 +58,7 @@ public class Play implements Command {
             }
 
             trackManager.resume();
+            messageChannel.sendMessage("Resuming...").queue();
             return;
         }
 

@@ -40,8 +40,10 @@ public class Pause implements Command {
         assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks
         if (trackManager.getPlayer().isPaused()) {
             trackManager.resume();
+            messageChannel.sendMessage("Resuming...").queue();
         } else {
             trackManager.pause();
+            messageChannel.sendMessage("Pausing...").queue();
         }
     }
 }

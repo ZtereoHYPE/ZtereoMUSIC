@@ -8,7 +8,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
@@ -40,26 +39,23 @@ public class TrackManager extends AudioEventAdapter {
             infoChannel.sendMessage("Playing: " + track.getInfo().title).queue();
         } else {
             trackQueue.add(track);
-            infoChannel.sendMessage("Queued " + track.getInfo().title).queue();
+            infoChannel.sendMessage("Queued: " + track.getInfo().title).queue();
         }
     }
 
-    public void clearQueue() {
-        trackQueue.clear();
+    public void removeQueueItem(int index) {
+        trackQueue.remove(index);
     }
 
     public void pause() {
-        infoChannel.sendMessage("Pausing...").queue();
         player.setPaused(true);
     }
 
     public void resume() {
-        infoChannel.sendMessage("Resuming...").queue();
         player.setPaused(false);
     }
 
     public void skip() {
-        infoChannel.sendMessage("Skipping...").queue();
         playNext();
     }
 
@@ -68,10 +64,7 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     private void playNext() {
-        // if the player was playing a track (probably means it's a skip), stop it
-        if (player.getPlayingTrack() != null) {
-            player.stopTrack();
-        }
+
 
         if (trackQueue.isEmpty()) {
             infoChannel.sendMessage("The queue is empty!").queue();
@@ -99,9 +92,9 @@ public class TrackManager extends AudioEventAdapter {
             playNext();
         }
 
-        if (endReason.equals(AudioTrackEndReason.CLEANUP)) {
-            TrackManagers.removeGuildTrackManager(guild);
-        }
+//        if (endReason.equals(AudioTrackEndReason.CLEANUP)) {
+//            TrackManagers.removeGuildTrackManager(guild);
+//        }
 
         // endReason == FINISHED: A track finished or died by an exception (mayStartNext = true).
         // endReason == LOAD_FAILED: Loading of a track failed (mayStartNext = true).
@@ -110,11 +103,10 @@ public class TrackManager extends AudioEventAdapter {
         // endReason == CLEANUP: Player hasn't been queried for a while, if you want you can put a clone of this back to your queue
     }
 
-    @SneakyThrows
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         infoChannel.sendMessage("Uh oh, a track did something strange. Ask the owner to check for errors in console. Skpping...").queue();
-        throw exception.getCause();
+        System.out.println(exception.getCause().getMessage());
     }
 
     @Override
