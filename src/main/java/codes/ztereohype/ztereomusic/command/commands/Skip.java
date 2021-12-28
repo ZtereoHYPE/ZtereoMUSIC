@@ -5,12 +5,10 @@ import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Skip implements Command {
     private final CommandMeta meta;
@@ -38,13 +36,14 @@ public class Skip implements Command {
         Guild guild = messageEvent.getGuild();
         MessageChannel messageChannel = messageEvent.getChannel();
         TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);
-
         assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks (BOT_PLAYING)
-        if (trackManager.getPlayer().getPlayingTrack() == null) {
-            messageChannel.sendMessage("I am not even playing anything!").queue();
-            return;
+        AudioPlayer player = trackManager.getPlayer();
+
+        if (player.getPlayingTrack() != null) {
+            player.stopTrack();
         }
 
         trackManager.skip();
+        messageChannel.sendMessage("Skipping...").queue();
     }
 }
