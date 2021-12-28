@@ -43,7 +43,7 @@ public class Skip implements Command {
             player.stopTrack();
         }
 
-        trackManager.skip();
         messageChannel.sendMessage("Skipping...").queue();
+        trackManager.skip();
     }
 }
