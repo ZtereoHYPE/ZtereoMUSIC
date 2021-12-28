@@ -1,14 +1,11 @@
 package codes.ztereohype.ztereomusic.command.commands;
 
-import codes.ztereohype.ztereomusic.ZtereoMUSIC;
-import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Disconnect implements Command {
     private final CommandMeta meta;

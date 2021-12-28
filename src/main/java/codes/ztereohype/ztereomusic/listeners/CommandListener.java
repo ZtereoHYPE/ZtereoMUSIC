@@ -1,15 +1,12 @@
 package codes.ztereohype.ztereomusic.listeners;
 
 import codes.ztereohype.ztereomusic.ZtereoMUSIC;
-import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
-import codes.ztereohype.ztereomusic.command.permissions.Check;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -60,6 +57,7 @@ public class CommandListener extends ListenerAdapter {
         try {
             command.execute(event, args);
         } catch (Exception e) {
+            //todo: nicer embed with error pls
             message.getChannel().sendMessage("uh oh something really bad happened and yeah so yeah everything is aborted and cancelled i give up this is too hard kthxbye").queue();
             throw e;
         }

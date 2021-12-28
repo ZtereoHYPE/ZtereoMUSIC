@@ -1,19 +1,17 @@
 package codes.ztereohype.ztereomusic.audio;
 
 import codes.ztereohype.ztereomusic.ZtereoMUSIC;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public class TrackManagers {
-    //todo: separate infochannel setting from creation or getting, maybe remove guildtrackmanager should accept a tracc manager?
+    //note: maybe make infoChannel an optional? not sure how to make this better, ask rep
     @Nullable
-    public static TrackManager getGuildTrackManager(Guild guild, MessageChannel infoChannel) {
+    public static TrackManager getGuildTrackManager(Guild guild, @Nullable MessageChannel infoChannel) {
         long guildId = guild.getIdLong();
 
         TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guildId);

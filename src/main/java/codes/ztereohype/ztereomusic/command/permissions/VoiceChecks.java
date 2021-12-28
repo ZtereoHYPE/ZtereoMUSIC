@@ -1,18 +1,13 @@
 package codes.ztereohype.ztereomusic.command.permissions;
 
 import codes.ztereohype.ztereomusic.audio.TrackManager;
-import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-// todo: make an actual good system
-// Since these permission checks basically need to run for every single voice-related command,
-// we just get the info we need... idk i need to think this through
 public enum VoiceChecks {
     BOT_CONNECTED(new Check() {
         @Override
