@@ -4,8 +4,8 @@ import codes.ztereohype.ztereomusic.audio.TrackManager;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.commands.*;
 import codes.ztereohype.ztereomusic.database.Config;
+import codes.ztereohype.ztereomusic.listeners.AloneDisconnectListener;
 import codes.ztereohype.ztereomusic.listeners.CommandListener;
-import codes.ztereohype.ztereomusic.listeners.vcLeaveListener;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -24,9 +24,6 @@ import java.io.FileNotFoundException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-
-import static net.dv8tion.jda.api.requests.GatewayIntent.GUILD_MESSAGES;
-import static net.dv8tion.jda.api.requests.GatewayIntent.GUILD_VOICE_STATES;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -84,6 +81,12 @@ public class ZtereoMUSIC {
         Disconnect disconnect = new Disconnect();
         this.getCommandMap().put(disconnect.getMeta().getName(), disconnect);
 
+        Clear clear = new Clear();
+        this.getCommandMap().put(clear.getMeta().getName(), clear);
+
+        Remove remove = new Remove();
+        this.getCommandMap().put(remove.getMeta().getName(), remove);
+
         Queue queue = new Queue();
         this.getCommandMap().put(queue.getMeta().getName(), queue);
 
@@ -103,6 +106,6 @@ public class ZtereoMUSIC {
 
     private void setListeners() {
         this.getJda().addEventListener(new CommandListener());
-        this.getJda().addEventListener(new vcLeaveListener());
+        this.getJda().addEventListener(new AloneDisconnectListener());
     }
 }
