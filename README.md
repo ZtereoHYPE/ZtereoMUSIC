@@ -21,20 +21,21 @@
 - [x] Skip command
 - [x] Disconnect command
 - [x] Queue command to view queue (half assed lol)
-- [ ] Remove [index] to remove an element
-- [ ] Clear to clear queue
+- [x] Remove [index] to remove an element
+- [x] Clear to clear queue
 - [ ] Clean up todos and code!
 
 ### Second alpha:
 - [ ] Fancy embeds for everything!
 - [x] VoiceChecks class to check for tunable micro-permissions (eg. if someone in a different channel calls the bot, don't connect)
-- [ ] Various listeners if there's nobody in vc for a while or if it gets disconnected or if last disconnects (stop playin) (very important as cleanup doesnt always get called)
+- [x] Various listeners if there's nobody in vc for a while or if it gets disconnected or if last disconnects (stop playin) (very important as cleanup doesnt always get called)
 - [ ] Help command (on ping too)
 - [ ] Spotify URLs/playlists support (search on YouTube)
 - [ ] When a track fails try to play it again and if that fails send the error message.
 
 ### Later:
 - [ ] Toggleable permissions system based on DJ role and based on server
+- [ ] Per-server prefix with database
 - [ ] fast forward command
 - [ ] Ability to search the song name
 - [ ] Slash commands? 
