@@ -45,6 +45,10 @@ public class Remove implements Command {
         TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);
         assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks (BOT_PLAYING)
 
+        if (trackManager.trackQueue.size() == 0) {
+            messageChannel.sendMessage("There are no songs in queue.").queue();
+        }
+
         Map<String, Integer> indexAliases = new HashMap<>();
         indexAliases.put("first", 1);
         indexAliases.put("last", trackManager.trackQueue.size());
@@ -69,6 +73,7 @@ public class Remove implements Command {
         }
 
         trackManager.removeQueueItem(parsedIndex - 1);
+        messageChannel.sendMessage("Removed the song.").queue();
     }
 
     public static boolean isNumeric(String strNum) {
