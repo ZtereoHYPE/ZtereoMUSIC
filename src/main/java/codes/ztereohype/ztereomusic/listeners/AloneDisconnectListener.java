@@ -53,7 +53,6 @@ public class AloneDisconnectListener extends ListenerAdapter {
 
         if (guild.getAudioManager().getConnectedChannel() == null) return; // if we're not connected ignore
 
-
         // if there's no longer only one member don't be alone (i wrote this at 4am please tell me it works)
         if (guild.getAudioManager().getConnectedChannel().getMembers().size() > 1) {
             aloneGuilds.remove(guild);
@@ -66,7 +65,7 @@ public class AloneDisconnectListener extends ListenerAdapter {
             if ((time - entry.getValue()) > (long) 5 * 60 * 1000) {
                 TrackManagers.removeGuildTrackManager(entry.getKey());
                 aloneGuilds.remove(entry.getKey());
-            };
+            }
         }
     }
 
