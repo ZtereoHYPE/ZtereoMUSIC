@@ -35,7 +35,7 @@ public class CustomAudioLoadResultHandler implements AudioLoadResultHandler {
 
     @Override
     public void loadFailed(FriendlyException throwable) {
-        this.messageChannel.sendMessage("everything blew up and died. i'm sorry.").queue();
+        this.messageChannel.sendMessage("Failed loading that audio. Try with a different source (eg. YouTube URL)").queue();
     }
 }
 
