@@ -7,9 +7,9 @@ import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.CommandMeta;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
+import codes.ztereohype.ztereomusic.networking.SpotifyApiHelper;
 import codes.ztereohype.ztereomusic.networking.YoutubeSearch;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import lombok.Getter;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -20,8 +20,9 @@ import java.util.regex.Pattern;
 
 public class Play implements Command {
     private static final Pattern URL_PATTERN = Pattern.compile("^(http|https)://([a-z]+\\.[a-z]+)+/\\S+$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile("^(?:https://open\\.spotify\\.com/(track|playlist)/)(\\S+(?:\\?si=\\S+))$");
 
-    private @Getter final CommandMeta meta;
+    private final CommandMeta meta;
 
     public Play() {
         this.meta = CommandMeta.builder()
@@ -35,10 +36,10 @@ public class Play implements Command {
                                .build();
     }
 
-//    @Override
-//    public CommandMeta getMeta() {
-//        return this.meta;
-//    }
+    @Override
+    public CommandMeta getMeta() {
+        return this.meta;
+    }
 
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Member author = Objects.requireNonNull(messageEvent.getMember());
@@ -64,11 +65,25 @@ public class Play implements Command {
 
         String mergedArgs = String.join(" ", args);
         Matcher matchedUrls = URL_PATTERN.matcher(mergedArgs);
+        Matcher matchedSpotifyUrl = SPOTIFY_URL_PATTERN.matcher(mergedArgs);
         boolean urlFound = matchedUrls.find();
+        boolean spotifyUrlFound = matchedSpotifyUrl.find();
+
+        if (spotifyUrlFound) {
+            Optional<String> songSearchQuery = SpotifyApiHelper.query(mergedArgs, messageChannel);
+
+            if (songSearchQuery.isPresent()) {
+                mergedArgs = songSearchQuery.get();
+            } else {
+                return; // SpotifyApiHelper takes care of answering why it failed
+            }
+        }
 
         String identifier;
-        if (!urlFound) {
+        // spotify urls need to be queried through youtube
+        if (!urlFound | spotifyUrlFound) {
             Optional<String> query = YoutubeSearch.query(mergedArgs);
+
             if (query.isPresent()) {
                 identifier = query.get();
             } else {
@@ -76,7 +91,6 @@ public class Play implements Command {
                 return;
             }
         } else {
-            // set identifier to the parsed url
             identifier = mergedArgs;
         }
 

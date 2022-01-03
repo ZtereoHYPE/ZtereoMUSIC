@@ -6,6 +6,7 @@ import codes.ztereohype.ztereomusic.command.commands.*;
 import codes.ztereohype.ztereomusic.database.Config;
 import codes.ztereohype.ztereomusic.listeners.AloneDisconnectListener;
 import codes.ztereohype.ztereomusic.listeners.CommandListener;
+import codes.ztereohype.ztereomusic.networking.SpotifyApiHelper;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -52,7 +53,8 @@ public class ZtereoMUSIC {
 
         EnumSet<GatewayIntent> intents = EnumSet.of(
                 GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_VOICE_STATES
+                GatewayIntent.GUILD_VOICE_STATES,
+                GatewayIntent.GUILD_EMOJIS
         );
 
         ztereoMUSIC.setConfig(Config.loadFrom("./config.json5"));
@@ -102,6 +104,7 @@ public class ZtereoMUSIC {
         this.setPlayerManager(new DefaultAudioPlayerManager());
         AudioSourceManagers.registerRemoteSources(this.getPlayerManager());
         AudioSourceManagers.registerLocalSource(this.getPlayerManager());
+        SpotifyApiHelper.startTokenTimer();
     }
 
     private void setListeners() {
