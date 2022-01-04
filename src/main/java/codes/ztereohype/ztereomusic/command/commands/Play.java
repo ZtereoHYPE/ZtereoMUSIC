@@ -81,7 +81,7 @@ public class Play implements Command {
 
         String identifier;
         // spotify urls need to be queried through youtube
-        if (!urlFound | spotifyUrlFound) {
+        if (!urlFound || spotifyUrlFound) {
             Optional<String> query = YoutubeSearch.query(mergedArgs);
 
             if (query.isPresent()) {
