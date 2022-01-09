@@ -72,8 +72,8 @@ public class Remove implements Command {
             return;
         }
 
-        trackManager.removeQueueItem(parsedIndex - 1);
-        messageChannel.sendMessage("Removed the song.").queue();
+        String title = trackManager.removeQueueItem(parsedIndex - 1);
+        messageChannel.sendMessage("Removed " + title).queue();
     }
 
     public static boolean isNumeric(String strNum) {

@@ -43,8 +43,10 @@ public class TrackManager extends AudioEventAdapter {
         }
     }
 
-    public void removeQueueItem(int index) {
+    public String removeQueueItem(int index) {
+        String title = trackQueue.get(index).getInfo().title;
         trackQueue.remove(index);
+        return title;
     }
 
     public void pause() {
