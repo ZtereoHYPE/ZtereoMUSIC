@@ -108,7 +108,7 @@ public class SpotifyApiHelper {
 
             String title = JSON.parse(response.body()).query(titlePath).asString();
             String author = JSON.parse(response.body()).query(authorPath).asString();
-            String songSearchQuery = title + " " + author;
+            String songSearchQuery = title + " " + author + "official audio";
 
             return Optional.of(songSearchQuery);
         } catch (IOException | InterruptedException | JsonSyntaxException e) {
