@@ -1,0 +1,25 @@
+name: Gradle CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Initialize JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ZtereoBOT
+          path: build/libs/ZtereoBOT-0.0.2-all.jar
