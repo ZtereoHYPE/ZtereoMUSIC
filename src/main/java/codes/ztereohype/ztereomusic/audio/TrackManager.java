@@ -1,5 +1,7 @@
 package codes.ztereohype.ztereomusic.audio;
 
+import codes.ztereohype.ztereomusic.ZtereoMUSIC;
+import codes.ztereohype.ztereomusic.networking.YoutubeSearch;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
@@ -10,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.shadew.util.data.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,13 +93,27 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (endReason.mayStartNext) {
-            playNext();
-        }
+        switch (endReason) {
+            case FINISHED -> {
+                playNext();
+            }
+            //todo: warning: this will create an infinite loop if a specific video has issues...
+            case LOAD_FAILED -> {
+                infoChannel.sendMessage("Loading failed, retrying...").queue();
+                String identifier;
+                String trackTitle = track.getInfo().title;
 
-//        if (endReason.equals(AudioTrackEndReason.CLEANUP)) {
-//            TrackManagers.removeGuildTrackManager(guild);
-//        }
+                Pair<Boolean, String> query = YoutubeSearch.query(trackTitle);
+                if (query.first()) {
+                    identifier = query.second();
+                } else {
+                    infoChannel.sendMessage(query.second()).queue();
+                    return;
+                }
+
+                ZtereoMUSIC.getInstance().getPlayerManager().loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
+            }
+        }
 
         // endReason == FINISHED: A track finished or died by an exception (mayStartNext = true).
         // endReason == LOAD_FAILED: Loading of a track failed (mayStartNext = true).
