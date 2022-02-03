@@ -4,16 +4,16 @@ import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import net.shadew.json.Json;
 import net.shadew.json.JsonPath;
 import net.shadew.json.JsonSyntaxException;
+import net.shadew.util.data.Pair;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 
 public class YoutubeSearch {
     private static final String API_KEY = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("yt_api_key");
     private static final Json JSON = Json.json();
 
-    public static Optional<String> query(String title) {
+    public static Pair<Boolean, String> query(String title) {
         String query = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=%22"
                 + title.replace(' ', '+') + "%22&type=video&key=" + API_KEY;
 
@@ -22,7 +22,7 @@ public class YoutubeSearch {
             jsonResponse = new String(new URL(query).openStream().readAllBytes());
         } catch (IOException e) {
             e.printStackTrace();
-            return Optional.empty();
+            return Pair.of(false, "There was a request error contacting youtube.");
         }
 
         JsonPath resultsNumberPath = JsonPath.parse("pageInfo.totalResults");
@@ -30,12 +30,12 @@ public class YoutubeSearch {
 
         try {
             int results = JSON.parse(jsonResponse).query(resultsNumberPath).asInt();
-            if (results == 0) return Optional.empty();
+            if (results == 0) return Pair.of(false, "I found no matches for that song.");
 
-            return Optional.ofNullable(JSON.parse(jsonResponse).query(videoPath).asString());
+            return Pair.of(true, JSON.parse(jsonResponse).query(videoPath).asString());
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
-            return Optional.empty();
+            return Pair.of(false, "There was an error parsing YouTube's reply.");
         }
     }
 }

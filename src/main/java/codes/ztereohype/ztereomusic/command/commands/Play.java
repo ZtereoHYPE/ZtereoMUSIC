@@ -12,9 +12,9 @@ import codes.ztereohype.ztereomusic.networking.YoutubeSearch;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.shadew.util.data.Pair;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,24 +70,24 @@ public class Play implements Command {
         boolean spotifyUrlFound = matchedSpotifyUrl.find();
 
         if (spotifyUrlFound) {
-            Optional<String> songSearchQuery = SpotifyApiHelper.query(mergedArgs, messageChannel);
+            Pair<Boolean, String> songSearchQuery = SpotifyApiHelper.query(mergedArgs);
 
-            if (songSearchQuery.isPresent()) {
-                mergedArgs = songSearchQuery.get();
+            if (songSearchQuery.first()) {
+                mergedArgs = songSearchQuery.second();
             } else {
-                return; // SpotifyApiHelper takes care of answering why it failed
+                messageChannel.sendMessage(songSearchQuery.second()).queue();
+                return;
             }
         }
 
         String identifier;
         // spotify urls need to be queried through youtube
         if (!urlFound || spotifyUrlFound) {
-            Optional<String> query = YoutubeSearch.query(mergedArgs);
-
-            if (query.isPresent()) {
-                identifier = query.get();
+            Pair<Boolean, String> query = YoutubeSearch.query(mergedArgs);
+            if (query.first()) {
+                identifier = query.second();
             } else {
-                messageEvent.getChannel().sendMessage("I found no matches for that song!").queue();
+                messageEvent.getChannel().sendMessage(query.second()).queue();
                 return;
             }
         } else {

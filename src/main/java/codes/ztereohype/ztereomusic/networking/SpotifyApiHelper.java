@@ -2,10 +2,9 @@ package codes.ztereohype.ztereomusic.networking;
 
 import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import lombok.SneakyThrows;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.shadew.json.Json;
 import net.shadew.json.JsonPath;
-import net.shadew.json.JsonSyntaxException;
+import net.shadew.util.data.Pair;
 
 import java.io.IOException;
 import java.net.URI;
@@ -50,7 +49,6 @@ public class SpotifyApiHelper {
     @SneakyThrows
     private static Optional<String> getToken() {
         HttpClient client = HttpClient.newHttpClient();
-
         HttpRequest request = HttpRequest.newBuilder(
                 URI.create("https://accounts.spotify.com/api/token?grant_type=client_credentials"))
                 .POST(HttpRequest.BodyPublishers.ofString(""))
@@ -63,21 +61,21 @@ public class SpotifyApiHelper {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             String results = JSON.parse(response.body()).query(tokenPath).asString();
             return Optional.ofNullable(results);
-        } catch (IOException | InterruptedException | JsonSyntaxException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return Optional.empty();
         }
     }
 
-    public static Optional<String> query(String songUrl, MessageChannel messageChannel) {
+    // boolean is isSuccessful and string is content -> error if failure and content if success
+    public static Pair<Boolean, String> query(String songUrl) {
         if (spotifyToken == null) {
             System.out.println("Null Spotify token detected");
-            messageChannel.sendMessage("I don't have a spotify token for now. Try again later.").queue();
-            return Optional.empty();
+            return Pair.of(false, "I don't have a spotify token for now. Try again later.");
         }
 
-        if (songUrl.contains("/playlist/")) {
-            messageChannel.sendMessage("Playlists aren't supported for now, please send the individual song links.").queue();
+        if (songUrl.contains("playlist")) {
+            return Pair.of(false, "Playlists aren't supported for now, please send the individual song links.");
         }
 
         Matcher matchedSpotifyIdentifier = IDENTIFIER_PATTERN.matcher(songUrl);
@@ -85,8 +83,7 @@ public class SpotifyApiHelper {
         if (matchedSpotifyIdentifier.find()) {
             spotifyIdentifier = matchedSpotifyIdentifier.group();
         } else {
-            messageChannel.sendMessage("Could not parse Spotify link. Try entering the song title directly.").queue();
-            return Optional.empty();
+            return Pair.of(false, "Could not parse Spotify link. Try entering the song title directly.");
         }
 
         String query = "https://api.spotify.com/v1/tracks?ids="
@@ -102,19 +99,17 @@ public class SpotifyApiHelper {
                 .build();
 
         JsonPath titlePath = JsonPath.parse("tracks[0].name");
-        JsonPath authorPath = JsonPath.parse("tracks[0].artists[0].name");
+//        JsonPath authorPath = JsonPath.parse("tracks[0].artists[0].name");
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             String title = JSON.parse(response.body()).query(titlePath).asString();
-            String author = JSON.parse(response.body()).query(authorPath).asString();
-            String songSearchQuery = title + " " + author + "official audio";
+//            String author = JSON.parse(response.body()).query(authorPath).asString();
 
-            return Optional.of(songSearchQuery);
-        } catch (IOException | InterruptedException | JsonSyntaxException e) {
+            return Pair.of(true, title);
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            messageChannel.sendMessage("Something wrong happened with the spotify request.").queue();
-            return Optional.empty();
+            return Pair.of(false,"Something wrong happened with the spotify request.");
         }
     }
 }
