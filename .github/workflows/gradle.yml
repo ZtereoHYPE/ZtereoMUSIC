@@ -22,5 +22,5 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ZtereoBOT
+          name: ZtereoMUSIC
           path: build/libs/ZtereoMUSIC-0.0.2-all.jar
