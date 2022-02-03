@@ -18,10 +18,10 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import net.shadew.json.JsonSyntaxException;
 
 import javax.security.auth.login.LoginException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,8 +46,8 @@ public class ZtereoMUSIC {
         return ZtereoMUSIC.INSTANCE;
     }
 
-    @SneakyThrows({ JsonSyntaxException.class, FileNotFoundException.class, LoginException.class,
-                    InterruptedException.class })
+    @SneakyThrows({ FileNotFoundException.class, LoginException.class,
+                    InterruptedException.class, IOException.class })
     public static void main(String[] args) {
         ZtereoMUSIC ztereoMUSIC = ZtereoMUSIC.getInstance();
 
