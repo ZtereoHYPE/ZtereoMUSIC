@@ -6,5 +6,6 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public interface Check {
     boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager);
+
     String getErrorCode();
 }

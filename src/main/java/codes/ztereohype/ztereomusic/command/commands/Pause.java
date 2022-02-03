@@ -14,25 +14,23 @@ public class Pause implements Command {
 
     public Pause() {
         this.meta = CommandMeta.builder()
-                               .name("pause")
-                               .description("Pause the playing music")
-                               .aliases(new String[] { "resume" })
-                               .isNsfw(false)
-                               .isHidden(false)
-                               .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                                           VoiceChecks.BOT_PLAYING,
-                                                           VoiceChecks.USER_CONNECTED,
-                                                           VoiceChecks.SAME_VC_IF_CONNECTED })
-                               .build();
+            .name("pause")
+            .description("Pause the playing music")
+            .aliases(new String[] { "resume" })
+            .isNsfw(false)
+            .isHidden(false)
+            .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                        VoiceChecks.BOT_PLAYING,
+                                        VoiceChecks.USER_CONNECTED,
+                                        VoiceChecks.SAME_VC_IF_CONNECTED })
+            .build();
     }
 
-    @Override
-    public CommandMeta getMeta() {
+    @Override public CommandMeta getMeta() {
         return this.meta;
     }
 
-    @Override
-    public void execute(MessageReceivedEvent messageEvent, String[] args) {
+    @Override public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
         MessageChannel messageChannel = messageEvent.getChannel();
         TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);

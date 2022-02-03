@@ -4,7 +4,9 @@ import codes.ztereohype.ztereomusic.ZtereoMUSIC;
 import codes.ztereohype.ztereomusic.audio.TrackManagers;
 import codes.ztereohype.ztereomusic.command.Command;
 import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -18,8 +20,7 @@ public class CommandListener extends ListenerAdapter {
     private static final Map<String, Command> COMMAND_MAP = ZtereoMUSIC.getInstance().getCommandMap();
     private static final Map<String, String> COMMAND_ALIASES = ZtereoMUSIC.getInstance().getCommandAliases();
 
-    @Override
-    public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
+    @Override public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         Message message = event.getMessage();
         MessageChannel messageChannel = event.getChannel();
         String content = message.getContentRaw();
@@ -47,7 +48,10 @@ public class CommandListener extends ListenerAdapter {
 
         // check if the command is allowed and stop at first failure (order is important)
         for (VoiceChecks checkEnum : command.getMeta().getChecks()) {
-            if (!checkEnum.getCheck().getResult(message.getMember(), guild.getAudioManager().getConnectedChannel(), TrackManagers.getGuildTrackManager(guild, messageChannel))) {
+            if (!checkEnum.getCheck()
+                .getResult(message.getMember(),
+                           guild.getAudioManager().getConnectedChannel(),
+                           TrackManagers.getGuildTrackManager(guild, messageChannel))) {
                 message.reply(checkEnum.getCheck().getErrorCode()).queue();
                 return;
             }
@@ -58,7 +62,10 @@ public class CommandListener extends ListenerAdapter {
             command.execute(event, args);
         } catch (Exception e) {
             //todo: nicer embed with error pls
-            message.getChannel().sendMessage("uh oh something really bad happened and yeah so yeah everything is aborted and cancelled i give up this is too hard kthxbye").queue();
+            message.getChannel()
+                .sendMessage(
+                    "uh oh something really bad happened and yeah so yeah everything is aborted and cancelled i give up this is too hard kthxbye")
+                .queue();
             throw e;
         }
     }

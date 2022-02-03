@@ -20,9 +20,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SpotifyApiHelper {
-    private static final String CLIENT_ID = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("spotify_client_id");
-    private static final String CLIENT_SECRET = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("spotify_client_secret");
-    private static final Pattern IDENTIFIER_PATTERN = Pattern.compile("(?:(?<=https://open\\.spotify\\.com/track/)|(?<=https://open\\.spotify\\.com/playlist/))(\\S+(?=\\?si=\\S))");
+    private static final String CLIENT_ID = ZtereoMUSIC.getInstance()
+        .getConfig()
+        .getPropreties()
+        .get("spotify_client_id");
+    private static final String CLIENT_SECRET = ZtereoMUSIC.getInstance()
+        .getConfig()
+        .getPropreties()
+        .get("spotify_client_secret");
+    private static final Pattern IDENTIFIER_PATTERN = Pattern.compile(
+        "(?:(?<=https://open\\.spotify\\.com/track/)|(?<=https://open\\.spotify\\.com/playlist/))(\\S+(?=\\?si=\\S))");
 
     private static String spotifyToken;
 
@@ -31,8 +38,7 @@ public class SpotifyApiHelper {
     public static void startTokenTimer() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 spotifyToken = null; //remove old outdated token
                 Optional<String> parsedToken = getToken();
 
@@ -43,18 +49,19 @@ public class SpotifyApiHelper {
 
                 spotifyToken = parsedToken.get();
             }
-        }, 0, 3599*1000);
+        }, 0, 3599 * 1000);
     }
 
-    @SneakyThrows
-    private static Optional<String> getToken() {
+    @SneakyThrows private static Optional<String> getToken() {
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder(
-                URI.create("https://accounts.spotify.com/api/token?grant_type=client_credentials"))
-                .POST(HttpRequest.BodyPublishers.ofString(""))
-                .header("Authorization", "Basic " + Base64.getEncoder().encodeToString((CLIENT_ID + ":" + CLIENT_SECRET).getBytes(StandardCharsets.UTF_8.toString())))
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(
+                "https://accounts.spotify.com/api/token?grant_type=client_credentials"))
+            .POST(HttpRequest.BodyPublishers.ofString(""))
+            .header("Authorization",
+                    "Basic " + Base64.getEncoder()
+                        .encodeToString((CLIENT_ID + ":" + CLIENT_SECRET).getBytes(StandardCharsets.UTF_8.toString())))
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .build();
 
         JsonPath tokenPath = JsonPath.parse("access_token");
         try {
@@ -86,30 +93,28 @@ public class SpotifyApiHelper {
             return Pair.of(false, "Could not parse Spotify link. Try entering the song title directly.");
         }
 
-        String query = "https://api.spotify.com/v1/tracks?ids="
-                + spotifyIdentifier + "&market=ES"; //españaaaa
+        String query = "https://api.spotify.com/v1/tracks?ids=" + spotifyIdentifier + "&market=ES"; //españaaaa
 
         HttpClient client = HttpClient.newHttpClient();
 
-        HttpRequest request = HttpRequest.newBuilder(
-                URI.create(query))
-                .GET()
-                .header("Authorization", "Bearer " + spotifyToken)
-                .header("Content-Type", "application/json")
-                .build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(query))
+            .GET()
+            .header("Authorization", "Bearer " + spotifyToken)
+            .header("Content-Type", "application/json")
+            .build();
 
         JsonPath titlePath = JsonPath.parse("tracks[0].name");
-//        JsonPath authorPath = JsonPath.parse("tracks[0].artists[0].name");
+        //        JsonPath authorPath = JsonPath.parse("tracks[0].artists[0].name");
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             String title = JSON.parse(response.body()).query(titlePath).asString();
-//            String author = JSON.parse(response.body()).query(authorPath).asString();
+            //            String author = JSON.parse(response.body()).query(authorPath).asString();
 
             return Pair.of(true, title);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            return Pair.of(false,"Something wrong happened with the spotify request.");
+            return Pair.of(false, "Something wrong happened with the spotify request.");
         }
     }
 }

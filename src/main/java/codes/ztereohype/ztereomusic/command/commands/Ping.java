@@ -10,17 +10,16 @@ public class Ping implements Command {
 
     public Ping() {
         this.meta = CommandMeta.builder()
-                               .name("ping")
-                               .description("A command to get pinged")
-                               .aliases(new String[] { "pong", "pog" })
-                               .isNsfw(false)
-                               .isHidden(false)
-                               .checks(new VoiceChecks[0])
-                               .build();
+            .name("ping")
+            .description("A command to get pinged")
+            .aliases(new String[] { "pong", "pog" })
+            .isNsfw(false)
+            .isHidden(false)
+            .checks(new VoiceChecks[0])
+            .build();
     }
 
-    @Override
-    public CommandMeta getMeta() {
+    @Override public CommandMeta getMeta() {
         return this.meta;
     }
 

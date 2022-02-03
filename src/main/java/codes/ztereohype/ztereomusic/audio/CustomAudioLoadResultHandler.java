@@ -16,26 +16,23 @@ public class CustomAudioLoadResultHandler implements AudioLoadResultHandler {
         trackManager.setInfoChannel(messageChannel);
     }
 
-    @Override
-    public void trackLoaded(AudioTrack track) {
+    @Override public void trackLoaded(AudioTrack track) {
         this.trackManager.queue(track);
     }
 
-    @Override
-    public void playlistLoaded(AudioPlaylist playlist) {
+    @Override public void playlistLoaded(AudioPlaylist playlist) {
         for (AudioTrack track : playlist.getTracks()) {
             this.trackManager.queue(track);
         }
     }
 
-    @Override
-    public void noMatches() {
+    @Override public void noMatches() {
         this.messageChannel.sendMessage("I found no matches for that song!").queue();
     }
 
-    @Override
-    public void loadFailed(FriendlyException throwable) {
-        this.messageChannel.sendMessage("Failed loading that audio. Try with a different source (eg. YouTube URL)").queue();
+    @Override public void loadFailed(FriendlyException throwable) {
+        this.messageChannel.sendMessage("Failed loading that audio. Try with a different source (eg. YouTube URL)")
+            .queue();
     }
 }
 

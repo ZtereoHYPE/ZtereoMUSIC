@@ -15,20 +15,19 @@ public class Skip implements Command {
 
     public Skip() {
         this.meta = CommandMeta.builder()
-                               .name("skip")
-                               .description("Skip the current track!")
-                               .aliases(new String[] { "next" })
-                               .isNsfw(false)
-                               .isHidden(false)
-                               .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                                           VoiceChecks.BOT_PLAYING,
-                                                           VoiceChecks.USER_CONNECTED,
-                                                           VoiceChecks.SAME_VC_IF_CONNECTED })
-                               .build();
+            .name("skip")
+            .description("Skip the current track!")
+            .aliases(new String[] { "next" })
+            .isNsfw(false)
+            .isHidden(false)
+            .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                        VoiceChecks.BOT_PLAYING,
+                                        VoiceChecks.USER_CONNECTED,
+                                        VoiceChecks.SAME_VC_IF_CONNECTED })
+            .build();
     }
 
-    @Override
-    public CommandMeta getMeta() {
+    @Override public CommandMeta getMeta() {
         return this.meta;
     }
 

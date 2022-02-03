@@ -15,20 +15,20 @@ public enum VoiceChecks {
             return connectedChannel != null;
         }
 
-        @Override
-        public String getErrorCode() {
+        @Override public String getErrorCode() {
             return "I am not playing anything.";
         }
     }),
 
     BOT_PLAYING(new Check() {
         @Override
-        public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, @Nullable TrackManager trackManager) {
+        public boolean getResult(Member messageAuthor,
+                                 VoiceChannel connectedChannel,
+                                 @Nullable TrackManager trackManager) {
             return trackManager != null && trackManager.getPlayer().getPlayingTrack() != null;
         }
 
-        @Override
-        public String getErrorCode() {
+        @Override public String getErrorCode() {
             return "I am not playing anything.";
         }
     }),
@@ -40,8 +40,7 @@ public enum VoiceChecks {
             return messageAuthor.getVoiceState().inVoiceChannel();
         }
 
-        @Override
-        public String getErrorCode() {
+        @Override public String getErrorCode() {
             return "You are not connected to a voice channel.";
         }
     }),
@@ -54,8 +53,7 @@ public enum VoiceChecks {
             return Objects.equals(messageAuthor.getVoiceState().getChannel(), connectedChannel);
         }
 
-        @Override
-        public String getErrorCode() {
+        @Override public String getErrorCode() {
             return "We are not in the same voice channel.";
         }
     }),
@@ -67,8 +65,7 @@ public enum VoiceChecks {
             return false;
         }
 
-        @Override
-        public String getErrorCode() {
+        @Override public String getErrorCode() {
             return "You don't have the *DJ role*.";
         }
     });

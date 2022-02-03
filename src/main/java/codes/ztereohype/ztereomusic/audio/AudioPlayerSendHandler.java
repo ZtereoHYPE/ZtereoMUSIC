@@ -14,19 +14,16 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
         this.audioPlayer = audioPlayer;
     }
 
-    @Override
-    public boolean canProvide() {
+    @Override public boolean canProvide() {
         lastFrame = audioPlayer.provide();
         return lastFrame != null;
     }
 
-    @Override
-    public ByteBuffer provide20MsAudio() {
+    @Override public ByteBuffer provide20MsAudio() {
         return ByteBuffer.wrap(lastFrame.getData());
     }
 
-    @Override
-    public boolean isOpus() {
+    @Override public boolean isOpus() {
         return true;
     }
 }

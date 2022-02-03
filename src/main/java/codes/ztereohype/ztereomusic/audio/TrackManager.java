@@ -82,21 +82,15 @@ public class TrackManager extends AudioEventAdapter {
         infoChannel.sendMessage("Playing next track: " + nextTrack.getInfo().title).queue();
     }
 
-    @Override
-    public void onPlayerPause(AudioPlayer player) {}
+    @Override public void onPlayerPause(AudioPlayer player) {}
 
-    @Override
-    public void onPlayerResume(AudioPlayer player) {}
+    @Override public void onPlayerResume(AudioPlayer player) {}
 
-    @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {}
+    @Override public void onTrackStart(AudioPlayer player, AudioTrack track) {}
 
-    @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+    @Override public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         switch (endReason) {
-            case FINISHED -> {
-                playNext();
-            }
+            case FINISHED -> playNext();
             //todo: warning: this will create an infinite loop if a specific video has issues...
             case LOAD_FAILED -> {
                 infoChannel.sendMessage("Loading failed, retrying...").queue();
@@ -111,7 +105,9 @@ public class TrackManager extends AudioEventAdapter {
                     return;
                 }
 
-                ZtereoMUSIC.getInstance().getPlayerManager().loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
+                ZtereoMUSIC.getInstance()
+                    .getPlayerManager()
+                    .loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
             }
         }
 
@@ -122,14 +118,13 @@ public class TrackManager extends AudioEventAdapter {
         // endReason == CLEANUP: Player hasn't been queried for a while, if you want you can put a clone of this back to your queue
     }
 
-    @Override
-    public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-        infoChannel.sendMessage("Uh oh, a track did something strange. Ask the owner to check for errors in console. Skpping...").queue();
+    @Override public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
+        infoChannel.sendMessage(
+            "Uh oh, a track did something strange. Ask the owner to check for errors in console. Skpping...").queue();
         System.out.println(exception.getCause().getMessage());
     }
 
-    @Override
-    public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
+    @Override public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
         infoChannel.sendMessage("Unable to play track " + track.getInfo().title + ". Skipping...").queue();
         trackQueue.remove(track);
         playNext();

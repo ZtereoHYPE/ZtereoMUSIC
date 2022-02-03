@@ -19,26 +19,27 @@ public class Remove implements Command {
 
     public Remove() {
         this.meta = CommandMeta.builder()
-                .name("remove")
-                .aliases(new String[] {"delete"})
-                .description("Remove the chosen item.")
-                .isNsfw(false)
-                .isHidden(false)
-                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                        VoiceChecks.BOT_PLAYING,
-                        VoiceChecks.USER_CONNECTED,
-                        VoiceChecks.SAME_VC_IF_CONNECTED })
-                .build();
+            .name("remove")
+            .aliases(new String[] { "delete" })
+            .description("Remove the chosen item.")
+            .isNsfw(false)
+            .isHidden(false)
+            .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                        VoiceChecks.BOT_PLAYING,
+                                        VoiceChecks.USER_CONNECTED,
+                                        VoiceChecks.SAME_VC_IF_CONNECTED })
+            .build();
     }
 
-    @Override
-    public void execute(MessageReceivedEvent messageEvent, String[] args) {
+    @Override public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
         MessageChannel messageChannel = messageEvent.getChannel();
 
         // if there's the wrong amount of arguments send the usage
         if (args.length != 1) {
-            messageChannel.sendMessage("Usage: `remove [index of song to remove]/first/last`. Use the `queue` command to find the index.").queue();
+            messageChannel.sendMessage(
+                    "Usage: `remove [index of song to remove]/first/last`. Use the `queue` command to find the index.")
+                .queue();
             return;
         }
 
@@ -59,11 +60,13 @@ public class Remove implements Command {
         // if there is an integer assume it's the index
         if (isNumeric(index)) {
             parsedIndex = Integer.parseInt(index);
-        // if there is a known string get the index from the map
+            // if there is a known string get the index from the map
         } else if (indexAliases.containsKey(index.toLowerCase(Locale.ROOT))) {
             parsedIndex = indexAliases.get(index);
         } else {
-            messageChannel.sendMessage("Usage: `remove [index of song to remove]/first/last`. Use the `queue` command to find the index.").queue();
+            messageChannel.sendMessage(
+                    "Usage: `remove [index of song to remove]/first/last`. Use the `queue` command to find the index.")
+                .queue();
             return;
         }
 

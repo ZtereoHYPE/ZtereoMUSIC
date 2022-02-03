@@ -46,21 +46,19 @@ public class ZtereoMUSIC {
         return ZtereoMUSIC.INSTANCE;
     }
 
-    @SneakyThrows({ FileNotFoundException.class, LoginException.class,
-                    InterruptedException.class, IOException.class })
+    @SneakyThrows({ FileNotFoundException.class, LoginException.class, InterruptedException.class, IOException.class })
     public static void main(String[] args) {
         ZtereoMUSIC ztereoMUSIC = ZtereoMUSIC.getInstance();
 
-        EnumSet<GatewayIntent> intents = EnumSet.of(
-                GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_VOICE_STATES,
-                GatewayIntent.GUILD_EMOJIS
-        );
+        EnumSet<GatewayIntent> intents = EnumSet.of(GatewayIntent.GUILD_MESSAGES,
+                                                    GatewayIntent.GUILD_VOICE_STATES,
+                                                    GatewayIntent.GUILD_EMOJIS);
 
         ztereoMUSIC.setConfig(Config.loadFrom("./config.json5"));
         ztereoMUSIC.setJda(JDABuilder.createDefault(ztereoMUSIC.getConfig().getPropreties().get("token"), intents)
-                                    .enableCache(CacheFlag.VOICE_STATE)
-                                    .build().awaitReady());
+                               .enableCache(CacheFlag.VOICE_STATE)
+                               .build()
+                               .awaitReady());
 
         ztereoMUSIC.setupAudio();
         ztereoMUSIC.setCommands();

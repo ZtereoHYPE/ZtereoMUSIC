@@ -9,7 +9,10 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AloneDisconnectListener extends ListenerAdapter {
     //sorry reperak, i tried using a list of pairs but iterating over it to find it in onGuildVoiceLeave is too much effort
@@ -18,15 +21,13 @@ public class AloneDisconnectListener extends ListenerAdapter {
     public AloneDisconnectListener() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 checkIfAloneAfterThreshold();
             }
         }, 5000, 5000);
     }
 
-    @Override
-    public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
+    @Override public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
         Guild guild = event.getGuild();
         Member leavingMember = event.getMember();
         Member ztereoBotMember = event.getGuild().getMember(ZtereoMUSIC.getInstance().getJda().getSelfUser());
@@ -47,8 +48,7 @@ public class AloneDisconnectListener extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
+    @Override public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
         Guild guild = event.getGuild();
 
         if (guild.getAudioManager().getConnectedChannel() == null) return; // if we're not connected ignore

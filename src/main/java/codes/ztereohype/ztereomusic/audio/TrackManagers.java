@@ -10,8 +10,7 @@ import javax.annotation.Nullable;
 
 public class TrackManagers {
     //note: maybe make infoChannel an optional? not sure how to make this better, ask rep
-    @Nullable
-    public static TrackManager getGuildTrackManager(Guild guild, @Nullable MessageChannel infoChannel) {
+    @Nullable public static TrackManager getGuildTrackManager(Guild guild, @Nullable MessageChannel infoChannel) {
         long guildId = guild.getIdLong();
 
         TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guildId);
@@ -27,7 +26,9 @@ public class TrackManagers {
         return trackManager;
     }
 
-    public static TrackManager getOrCreateGuildTrackManager(Guild guild, MessageChannel infoChannel, VoiceChannel requestedChannel) {
+    public static TrackManager getOrCreateGuildTrackManager(Guild guild,
+                                                            MessageChannel infoChannel,
+                                                            VoiceChannel requestedChannel) {
         long guildId = guild.getIdLong();
 
         TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guildId);

@@ -15,20 +15,19 @@ public class Clear implements Command {
 
     public Clear() {
         this.meta = CommandMeta.builder()
-                                .name("clear")
-                                .aliases(new String[] {"deleteall"})
-                                .description("Clears the queue and stops playing.")
-                                .isNsfw(false)
-                                .isHidden(false)
-                                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                                            VoiceChecks.BOT_PLAYING,
-                                                            VoiceChecks.USER_CONNECTED,
-                                                            VoiceChecks.SAME_VC_IF_CONNECTED })
-                                .build();
+            .name("clear")
+            .aliases(new String[] { "deleteall" })
+            .description("Clears the queue and stops playing.")
+            .isNsfw(false)
+            .isHidden(false)
+            .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                        VoiceChecks.BOT_PLAYING,
+                                        VoiceChecks.USER_CONNECTED,
+                                        VoiceChecks.SAME_VC_IF_CONNECTED })
+            .build();
     }
 
-    @Override
-    public void execute(MessageReceivedEvent messageEvent, String[] args) {
+    @Override public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
         MessageChannel messageChannel = messageEvent.getChannel();
         TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);

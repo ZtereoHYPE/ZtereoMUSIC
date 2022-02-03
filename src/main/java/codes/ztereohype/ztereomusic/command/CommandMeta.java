@@ -4,7 +4,8 @@ import codes.ztereohype.ztereomusic.command.permissions.VoiceChecks;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter @Builder
+@Getter
+@Builder
 public class CommandMeta {
     private final String name;
     private final String description;
