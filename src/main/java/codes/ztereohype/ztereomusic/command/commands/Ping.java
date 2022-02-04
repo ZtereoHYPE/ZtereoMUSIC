@@ -24,7 +24,6 @@ public class Ping implements Command {
     }
 
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
-        messageEvent.getMessage().reply("git ping'd lolmao").queue();
+        messageEvent.getMessage().reply("got ping'd lolmao").queue();
     }
-
 }
