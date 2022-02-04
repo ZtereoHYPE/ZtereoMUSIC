@@ -12,15 +12,15 @@ public class Disconnect implements Command {
 
     public Disconnect() {
         this.meta = CommandMeta.builder()
-            .name("disconnect")
-            .description("A command to kick the bot from the vc.")
-            .aliases(new String[] { "fuckoff", "bye" })
-            .isNsfw(false)
-            .isHidden(false)
-            .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                        VoiceChecks.USER_CONNECTED,
-                                        VoiceChecks.SAME_VC_IF_CONNECTED })
-            .build();
+                .name("disconnect")
+                .description("A command to kick the bot from the vc.")
+                .aliases(new String[] { "fuckoff", "bye" })
+                .isNsfw(false)
+                .isHidden(false)
+                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                            VoiceChecks.USER_CONNECTED,
+                                            VoiceChecks.SAME_VC_IF_CONNECTED })
+                .build();
     }
 
     @Override public CommandMeta getMeta() {

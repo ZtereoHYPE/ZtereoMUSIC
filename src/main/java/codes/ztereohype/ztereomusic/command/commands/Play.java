@@ -24,19 +24,19 @@ public class Play implements Command {
     private static final Pattern URL_PATTERN = Pattern.compile("^(http|https)://([a-z]+\\.[a-z]+)+/\\S+$",
                                                                Pattern.CASE_INSENSITIVE);
     private static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile(
-        "^(?:https://open\\.spotify\\.com/(track|playlist)/)(\\S+(?:\\?si=\\S+))$");
+            "^(?:https://open\\.spotify\\.com/(track|playlist)/)(\\S+(?:\\?si=\\S+))$");
 
     private final CommandMeta meta;
 
     public Play() {
         this.meta = CommandMeta.builder()
-            .name("play")
-            .description("Play music!")
-            .aliases(new String[] { "p" })
-            .isNsfw(false)
-            .isHidden(false)
-            .checks(new VoiceChecks[] { VoiceChecks.USER_CONNECTED, VoiceChecks.SAME_VC_IF_CONNECTED })
-            .build();
+                .name("play")
+                .description("Play music!")
+                .aliases(new String[] { "p" })
+                .isNsfw(false)
+                .isHidden(false)
+                .checks(new VoiceChecks[] { VoiceChecks.USER_CONNECTED, VoiceChecks.SAME_VC_IF_CONNECTED })
+                .build();
     }
 
     @Override public CommandMeta getMeta() {
@@ -56,7 +56,8 @@ public class Play implements Command {
 
             if (trackManager == null || !trackManager.getPlayer().isPaused()) {
                 messageChannel.sendMessage(
-                    "What should I play? Type the name of the song after the command or use a YouTube link!").queue();
+                                "What should I play? Type the name of the song after the command or use a YouTube link!")
+                        .queue();
                 return;
             }
 
@@ -99,7 +100,7 @@ public class Play implements Command {
         TrackManager trackManager = TrackManagers.getOrCreateGuildTrackManager(guild, messageChannel, voiceChannel);
 
         ZtereoMUSIC.getInstance()
-            .getPlayerManager()
-            .loadItem(identifier, new CustomAudioLoadResultHandler(trackManager, messageChannel));
+                .getPlayerManager()
+                .loadItem(identifier, new CustomAudioLoadResultHandler(trackManager, messageChannel));
     }
 }

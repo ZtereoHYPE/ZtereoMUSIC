@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrackManager extends AudioEventAdapter {
-    private final @Getter AudioPlayer player;
     public final List<AudioTrack> trackQueue = new ArrayList<>();
-    private @Getter @Setter MessageChannel infoChannel;
+    private final @Getter AudioPlayer player;
     private final Guild guild;
+    private @Getter @Setter MessageChannel infoChannel;
 
     public TrackManager(AudioPlayerManager playerManager, MessageChannel infoChannel, Guild guild) {
         this.player = playerManager.createPlayer();
@@ -106,8 +106,8 @@ public class TrackManager extends AudioEventAdapter {
                 }
 
                 ZtereoMUSIC.getInstance()
-                    .getPlayerManager()
-                    .loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
+                        .getPlayerManager()
+                        .loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
             }
         }
 
@@ -120,7 +120,8 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         infoChannel.sendMessage(
-            "Uh oh, a track did something strange. Ask the owner to check for errors in console. Skpping...").queue();
+                        "Uh oh, a track did something strange. Ask the owner to check for errors in console. Skpping...")
+                .queue();
         System.out.println(exception.getCause().getMessage());
     }
 

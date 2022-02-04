@@ -19,16 +19,28 @@ public class Remove implements Command {
 
     public Remove() {
         this.meta = CommandMeta.builder()
-            .name("remove")
-            .aliases(new String[] { "delete" })
-            .description("Remove the chosen item.")
-            .isNsfw(false)
-            .isHidden(false)
-            .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                        VoiceChecks.BOT_PLAYING,
-                                        VoiceChecks.USER_CONNECTED,
-                                        VoiceChecks.SAME_VC_IF_CONNECTED })
-            .build();
+                .name("remove")
+                .aliases(new String[] { "delete" })
+                .description("Remove the chosen item.")
+                .isNsfw(false)
+                .isHidden(false)
+                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                            VoiceChecks.BOT_PLAYING,
+                                            VoiceChecks.USER_CONNECTED,
+                                            VoiceChecks.SAME_VC_IF_CONNECTED })
+                .build();
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 
     @Override public void execute(MessageReceivedEvent messageEvent, String[] args) {
@@ -38,8 +50,8 @@ public class Remove implements Command {
         // if there's the wrong amount of arguments send the usage
         if (args.length != 1) {
             messageChannel.sendMessage(
-                    "Usage: `remove [index of song to remove]/first/last`. Use the `queue` command to find the index.")
-                .queue();
+                            "Usage: `remove [index of song to remove]/first/last`. Use the `queue` command to find the index.")
+                    .queue();
             return;
         }
 
@@ -65,8 +77,8 @@ public class Remove implements Command {
             parsedIndex = indexAliases.get(index);
         } else {
             messageChannel.sendMessage(
-                    "Usage: `remove [index of song to remove]/first/last`. Use the `queue` command to find the index.")
-                .queue();
+                            "Usage: `remove [index of song to remove]/first/last`. Use the `queue` command to find the index.")
+                    .queue();
             return;
         }
 
@@ -77,17 +89,5 @@ public class Remove implements Command {
 
         String title = trackManager.removeQueueItem(parsedIndex - 1);
         messageChannel.sendMessage("Removed " + title).queue();
-    }
-
-    public static boolean isNumeric(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            int i = Integer.parseInt(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
     }
 }

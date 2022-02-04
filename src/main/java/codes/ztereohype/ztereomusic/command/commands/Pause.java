@@ -14,16 +14,16 @@ public class Pause implements Command {
 
     public Pause() {
         this.meta = CommandMeta.builder()
-            .name("pause")
-            .description("Pause the playing music")
-            .aliases(new String[] { "resume" })
-            .isNsfw(false)
-            .isHidden(false)
-            .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                        VoiceChecks.BOT_PLAYING,
-                                        VoiceChecks.USER_CONNECTED,
-                                        VoiceChecks.SAME_VC_IF_CONNECTED })
-            .build();
+                .name("pause")
+                .description("Pause the playing music")
+                .aliases(new String[] { "resume" })
+                .isNsfw(false)
+                .isHidden(false)
+                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                            VoiceChecks.BOT_PLAYING,
+                                            VoiceChecks.USER_CONNECTED,
+                                            VoiceChecks.SAME_VC_IF_CONNECTED })
+                .build();
     }
 
     @Override public CommandMeta getMeta() {

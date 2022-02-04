@@ -19,15 +19,15 @@ public class Queue implements Command {
 
     public Queue() {
         this.meta = CommandMeta.builder()
-            .name("queue")
-            .description("See the queue")
-            .aliases(new String[] { "q" })
-            .isNsfw(false)
-            .isHidden(false)
-            .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                        VoiceChecks.USER_CONNECTED,
-                                        VoiceChecks.SAME_VC_IF_CONNECTED })
-            .build();
+                .name("queue")
+                .description("See the queue")
+                .aliases(new String[] { "q" })
+                .isNsfw(false)
+                .isHidden(false)
+                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
+                                            VoiceChecks.USER_CONNECTED,
+                                            VoiceChecks.SAME_VC_IF_CONNECTED })
+                .build();
     }
 
     @Override public CommandMeta getMeta() {
@@ -37,7 +37,7 @@ public class Queue implements Command {
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
         VoiceChannel voiceChannel = Objects.requireNonNull(Objects.requireNonNull(messageEvent.getMember())
-                                                               .getVoiceState()).getChannel();
+                                                                   .getVoiceState()).getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
 
         TrackManager trackManager = TrackManagers.getOrCreateGuildTrackManager(guild, messageChannel, voiceChannel);

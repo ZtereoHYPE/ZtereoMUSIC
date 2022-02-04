@@ -21,19 +21,17 @@ import java.util.regex.Pattern;
 
 public class SpotifyApiHelper {
     private static final String CLIENT_ID = ZtereoMUSIC.getInstance()
-        .getConfig()
-        .getPropreties()
-        .get("spotify_client_id");
+            .getConfig()
+            .getPropreties()
+            .get("spotify_client_id");
     private static final String CLIENT_SECRET = ZtereoMUSIC.getInstance()
-        .getConfig()
-        .getPropreties()
-        .get("spotify_client_secret");
+            .getConfig()
+            .getPropreties()
+            .get("spotify_client_secret");
     private static final Pattern IDENTIFIER_PATTERN = Pattern.compile(
-        "(?:(?<=https://open\\.spotify\\.com/track/)|(?<=https://open\\.spotify\\.com/playlist/))(\\S+(?=\\?si=\\S))");
-
-    private static String spotifyToken;
-
+            "(?:(?<=https://open\\.spotify\\.com/track/)|(?<=https://open\\.spotify\\.com/playlist/))(\\S+(?=\\?si=\\S))");
     private static final Json JSON = Json.json();
+    private static String spotifyToken;
 
     public static void startTokenTimer() {
         Timer timer = new Timer();
@@ -55,13 +53,13 @@ public class SpotifyApiHelper {
     @SneakyThrows private static Optional<String> getToken() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder(URI.create(
-                "https://accounts.spotify.com/api/token?grant_type=client_credentials"))
-            .POST(HttpRequest.BodyPublishers.ofString(""))
-            .header("Authorization",
-                    "Basic " + Base64.getEncoder()
-                        .encodeToString((CLIENT_ID + ":" + CLIENT_SECRET).getBytes(StandardCharsets.UTF_8.toString())))
-            .header("Content-Type", "application/x-www-form-urlencoded")
-            .build();
+                        "https://accounts.spotify.com/api/token?grant_type=client_credentials"))
+                .POST(HttpRequest.BodyPublishers.ofString(""))
+                .header("Authorization",
+                        "Basic " + Base64.getEncoder()
+                                .encodeToString((CLIENT_ID + ":" + CLIENT_SECRET).getBytes(StandardCharsets.UTF_8.toString())))
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .build();
 
         JsonPath tokenPath = JsonPath.parse("access_token");
         try {
@@ -98,10 +96,10 @@ public class SpotifyApiHelper {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder(URI.create(query))
-            .GET()
-            .header("Authorization", "Bearer " + spotifyToken)
-            .header("Content-Type", "application/json")
-            .build();
+                .GET()
+                .header("Authorization", "Bearer " + spotifyToken)
+                .header("Content-Type", "application/json")
+                .build();
 
         JsonPath titlePath = JsonPath.parse("tracks[0].name");
         //        JsonPath authorPath = JsonPath.parse("tracks[0].artists[0].name");

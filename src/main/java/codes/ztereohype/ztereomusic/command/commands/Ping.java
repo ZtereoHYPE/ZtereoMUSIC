@@ -10,13 +10,13 @@ public class Ping implements Command {
 
     public Ping() {
         this.meta = CommandMeta.builder()
-            .name("ping")
-            .description("A command to get pinged")
-            .aliases(new String[] { "pong", "pog" })
-            .isNsfw(false)
-            .isHidden(false)
-            .checks(new VoiceChecks[0])
-            .build();
+                .name("ping")
+                .description("A command to get pinged")
+                .aliases(new String[] { "pong", "pog" })
+                .isNsfw(false)
+                .isHidden(false)
+                .checks(new VoiceChecks[0])
+                .build();
     }
 
     @Override public CommandMeta getMeta() {
@@ -24,7 +24,7 @@ public class Ping implements Command {
     }
 
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
-        messageEvent.getMessage().reply("get ping'd lolmao").queue();
+        messageEvent.getMessage().reply("git ping'd lolmao").queue();
     }
 
 }
