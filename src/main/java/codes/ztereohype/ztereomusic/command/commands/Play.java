@@ -21,10 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Play implements Command {
-    private static final Pattern URL_PATTERN = Pattern.compile("^(http|https)://([a-z]+\\.[a-z]+)+/\\S+$",
-                                                               Pattern.CASE_INSENSITIVE);
-    private static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile(
-            "^(?:https://open\\.spotify\\.com/(track|playlist)/)(\\S+(?:\\?si=\\S+))$");
+    private static final Pattern URL_PATTERN = Pattern.compile("^(http|https)://([a-z]+\\.[a-z]+)+/\\S+$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile("^(?:https://open\\.spotify\\.com/(track|playlist)/)(\\S+(?:\\?si=\\S+))$");
 
     private final CommandMeta meta;
 
@@ -55,9 +53,7 @@ public class Play implements Command {
             TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);
 
             if (trackManager == null || !trackManager.getPlayer().isPaused()) {
-                messageChannel.sendMessage(
-                                "What should I play? Type the name of the song after the command or use a YouTube link!")
-                        .queue();
+                messageChannel.sendMessage("What should I play? Type the name of the song after the command or use a YouTube link!").queue();
                 return;
             }
 
@@ -99,8 +95,6 @@ public class Play implements Command {
 
         TrackManager trackManager = TrackManagers.getOrCreateGuildTrackManager(guild, messageChannel, voiceChannel);
 
-        ZtereoMUSIC.getInstance()
-                .getPlayerManager()
-                .loadItem(identifier, new CustomAudioLoadResultHandler(trackManager, messageChannel));
+        ZtereoMUSIC.getInstance().getPlayerManager().loadItem(identifier, new CustomAudioLoadResultHandler(trackManager, messageChannel));
     }
 }

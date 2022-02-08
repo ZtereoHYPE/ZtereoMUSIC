@@ -49,9 +49,9 @@ public class CommandListener extends ListenerAdapter {
         // check if the command is allowed and stop at first failure (order is important)
         for (VoiceChecks checkEnum : command.getMeta().getChecks()) {
             if (!checkEnum.getCheck()
-                    .getResult(message.getMember(),
-                               guild.getAudioManager().getConnectedChannel(),
-                               TrackManagers.getGuildTrackManager(guild, messageChannel))) {
+                          .getResult(message.getMember(),
+                                     guild.getAudioManager().getConnectedChannel(),
+                                     TrackManagers.getGuildTrackManager(guild, messageChannel))) {
                 message.reply(checkEnum.getCheck().getErrorCode()).queue();
                 return;
             }
@@ -63,9 +63,9 @@ public class CommandListener extends ListenerAdapter {
         } catch (Exception e) {
             //todo: nicer embed with error pls
             message.getChannel()
-                    .sendMessage(
-                            "uh oh something really bad happened and yeah so yeah everything is aborted and cancelled i give up this is too hard kthxbye")
-                    .queue();
+                   .sendMessage(
+                           "uh oh something really bad happened and yeah so yeah everything is aborted and cancelled i give up this is too hard kthxbye")
+                   .queue();
             throw e;
         }
     }

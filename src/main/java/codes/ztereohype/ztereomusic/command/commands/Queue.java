@@ -37,7 +37,7 @@ public class Queue implements Command {
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
         VoiceChannel voiceChannel = Objects.requireNonNull(Objects.requireNonNull(messageEvent.getMember())
-                                                                   .getVoiceState()).getChannel();
+                                                                  .getVoiceState()).getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
 
         TrackManager trackManager = TrackManagers.getOrCreateGuildTrackManager(guild, messageChannel, voiceChannel);

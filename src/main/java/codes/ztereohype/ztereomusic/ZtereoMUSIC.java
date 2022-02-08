@@ -56,9 +56,9 @@ public class ZtereoMUSIC {
 
         ztereoMUSIC.setConfig(Config.loadFrom("./config.json5"));
         ztereoMUSIC.setJda(JDABuilder.createDefault(ztereoMUSIC.getConfig().getPropreties().get("token"), intents)
-                                   .enableCache(CacheFlag.VOICE_STATE)
-                                   .build()
-                                   .awaitReady());
+                                     .enableCache(CacheFlag.VOICE_STATE)
+                                     .build()
+                                     .awaitReady());
 
         ztereoMUSIC.setupAudio();
         ztereoMUSIC.setCommands();

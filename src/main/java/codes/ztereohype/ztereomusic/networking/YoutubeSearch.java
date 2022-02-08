@@ -14,8 +14,7 @@ public class YoutubeSearch {
     private static final Json JSON = Json.json();
 
     public static Pair<Boolean, String> query(String title) {
-        String query = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=%22" + title.replace(' ',
-                                                                                                         '+') + "%22&type=video&key=" + API_KEY;
+        String query = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=%22" + title.replace(' ', '+') + "%22&type=video&key=" + API_KEY;
 
         String jsonResponse;
         try {
