@@ -1,6 +1,6 @@
 name: Gradle CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -24,8 +24,3 @@ jobs:
         with:
           name: ZtereoMUSIC
           path: build/libs/ZtereoMUSIC-0.0.2-all.jar
-      
-      - name: Tell the server to update the bot
-        uses: wei/curl@v1
-        with:
-          args: -X POST http://81.240.64.77:5000/actionsBuilt
