@@ -10,7 +10,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lombok.Getter;
 import lombok.Setter;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.shadew.util.data.Pair;
 
@@ -20,13 +19,11 @@ import java.util.List;
 public class TrackManager extends AudioEventAdapter {
     public final List<AudioTrack> trackQueue = new ArrayList<>();
     private final @Getter AudioPlayer player;
-    private final Guild guild;
     private @Getter @Setter MessageChannel infoChannel;
 
-    public TrackManager(AudioPlayerManager playerManager, MessageChannel infoChannel, Guild guild) {
+    public TrackManager(AudioPlayerManager playerManager, MessageChannel infoChannel) {
         this.player = playerManager.createPlayer();
         this.infoChannel = infoChannel;
-        this.guild = guild;
 
         player.addListener(this);
     }
@@ -69,8 +66,6 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     private void playNext() {
-
-
         if (trackQueue.isEmpty()) {
             infoChannel.sendMessage("The queue is empty!").queue();
             return;
@@ -91,6 +86,7 @@ public class TrackManager extends AudioEventAdapter {
     @Override public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         switch (endReason) {
             case FINISHED -> playNext();
+
             //todo: warning: this will create an infinite loop if a specific video has issues...
             case LOAD_FAILED -> {
                 infoChannel.sendMessage("Loading failed, retrying...").queue();
@@ -106,8 +102,8 @@ public class TrackManager extends AudioEventAdapter {
                 }
 
                 ZtereoMUSIC.getInstance()
-                        .getPlayerManager()
-                        .loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
+                           .getPlayerManager()
+                           .loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
             }
         }
 
@@ -120,8 +116,8 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         infoChannel.sendMessage(
-                        "Uh oh, a track did something strange. Ask the owner to check for errors in console. Skpping...")
-                .queue();
+                           "Uh oh, a track did something strange. Ask the owner to check for errors in console. Skpping...")
+                   .queue();
         System.out.println(exception.getCause().getMessage());
     }
 

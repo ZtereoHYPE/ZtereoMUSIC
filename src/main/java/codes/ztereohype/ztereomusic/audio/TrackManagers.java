@@ -34,7 +34,7 @@ public class TrackManagers {
         TrackManager trackManager = ZtereoMUSIC.getInstance().getGuildTrackManagerMap().get(guildId);
 
         if (trackManager == null) {
-            trackManager = new TrackManager(ZtereoMUSIC.getInstance().getPlayerManager(), infoChannel, guild);
+            trackManager = new TrackManager(ZtereoMUSIC.getInstance().getPlayerManager(), infoChannel);
             ZtereoMUSIC.getInstance().getGuildTrackManagerMap().put(guildId, trackManager);
             guild.getAudioManager().openAudioConnection(requestedChannel);
         }
