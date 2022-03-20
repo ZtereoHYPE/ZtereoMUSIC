@@ -19,6 +19,7 @@ import java.util.List;
 public class TrackManager extends AudioEventAdapter {
     public final List<AudioTrack> trackQueue = new ArrayList<>();
     private final @Getter AudioPlayer player;
+    private String hasRetriedId;
     private @Getter @Setter MessageChannel infoChannel;
 
     public TrackManager(AudioPlayerManager playerManager, MessageChannel infoChannel) {
@@ -89,7 +90,6 @@ public class TrackManager extends AudioEventAdapter {
 
             //todo: warning: this will create an infinite loop if a specific video has issues...
             case LOAD_FAILED -> {
-                infoChannel.sendMessage("Loading failed, retrying...").queue();
                 String identifier;
                 String trackTitle = track.getInfo().title;
 
@@ -101,9 +101,11 @@ public class TrackManager extends AudioEventAdapter {
                     return;
                 }
 
-                ZtereoMUSIC.getInstance()
-                           .getPlayerManager()
-                           .loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
+                if (!hasRetriedId.equals(identifier)) {
+                    hasRetriedId = identifier;
+                    infoChannel.sendMessage("Loading failed, retrying...").queue();
+                    ZtereoMUSIC.getInstance().getPlayerManager().loadItem(identifier, new CustomAudioLoadResultHandler(this, infoChannel));
+                }
             }
         }
 
@@ -115,9 +117,7 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     @Override public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-        infoChannel.sendMessage(
-                           "Uh oh, a track did something strange. Ask the owner to check for errors in console. Skpping...")
-                   .queue();
+        //        infoChannel.sendMessage("Uh oh, a track did something strange. Ask the owner to check for errors in console. ").queue();
         System.out.println(exception.getCause().getMessage());
     }
 
