@@ -46,13 +46,10 @@ public class ZtereoMUSIC {
         return ZtereoMUSIC.INSTANCE;
     }
 
-    @SneakyThrows({ FileNotFoundException.class, LoginException.class, InterruptedException.class, IOException.class })
-    public static void main(String[] args) {
+    @SneakyThrows({ FileNotFoundException.class, LoginException.class, InterruptedException.class, IOException.class }) public static void main(String[] args) {
         ZtereoMUSIC ztereoMUSIC = ZtereoMUSIC.getInstance();
 
-        EnumSet<GatewayIntent> intents = EnumSet.of(GatewayIntent.GUILD_MESSAGES,
-                                                    GatewayIntent.GUILD_VOICE_STATES,
-                                                    GatewayIntent.GUILD_EMOJIS);
+        EnumSet<GatewayIntent> intents = EnumSet.of(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS);
 
         ztereoMUSIC.setConfig(Config.loadFrom("./config.json5"));
         ztereoMUSIC.setJda(JDABuilder.createDefault(ztereoMUSIC.getConfig().getPropreties().get("token"), intents)
@@ -89,6 +86,9 @@ public class ZtereoMUSIC {
 
         Queue queue = new Queue();
         this.getCommandMap().put(queue.getMeta().getName(), queue);
+
+        Fart fart = new Fart();
+        this.getCommandMap().put(fart.getMeta().getName(), fart);
 
         for (String commandName : this.getCommandMap().keySet()) {
             for (String aliasName : this.getCommandMap().get(commandName).getMeta().getAliases()) {
