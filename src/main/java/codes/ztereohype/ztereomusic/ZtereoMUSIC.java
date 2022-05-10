@@ -52,7 +52,7 @@ public class ZtereoMUSIC {
         EnumSet<GatewayIntent> intents = EnumSet.of(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS);
 
         ztereoMUSIC.setConfig(Config.loadFrom("./config.json5"));
-        ztereoMUSIC.setJda(JDABuilder.createDefault(ztereoMUSIC.getConfig().getPropreties().get("token"), intents)
+        ztereoMUSIC.setJda(JDABuilder.createDefault(ztereoMUSIC.getConfig().getPropreties().getProperty("token"), intents)
                                      .enableCache(CacheFlag.VOICE_STATE)
                                      .build()
                                      .awaitReady());
@@ -92,7 +92,7 @@ public class ZtereoMUSIC {
 
         for (String commandName : this.getCommandMap().keySet()) {
             for (String aliasName : this.getCommandMap().get(commandName).getMeta().getAliases()) {
-                System.out.println("Loaded alias \"" + aliasName + "\" for command: " + commandName);
+                //                System.out.println("Loaded alias \"" + aliasName + "\" for command: " + commandName);
                 this.getCommandAliases().put(aliasName, commandName);
             }
         }
@@ -103,10 +103,12 @@ public class ZtereoMUSIC {
         AudioSourceManagers.registerRemoteSources(this.getPlayerManager());
         AudioSourceManagers.registerLocalSource(this.getPlayerManager());
         SpotifyApiHelper.startTokenTimer();
+        System.out.println("started audio");
     }
 
     private void setListeners() {
         this.getJda().addEventListener(new CommandListener());
         this.getJda().addEventListener(new AloneDisconnectListener());
+        System.out.println("started listeners");
     }
 }

@@ -15,7 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Remove implements Command {
-    private @Getter final CommandMeta meta;
+    private @Getter
+    final CommandMeta meta;
 
     public Remove() {
         this.meta = CommandMeta.builder()
@@ -53,13 +54,13 @@ public class Remove implements Command {
         TrackManager trackManager = TrackManagers.getGuildTrackManager(guild, messageChannel);
         assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks (BOT_PLAYING)
 
-        if (trackManager.trackQueue.size() == 0) {
+        if (trackManager.getTrackQueue().size() == 0) {
             messageChannel.sendMessage("There are no songs in queue.").queue();
         }
 
         Map<String, Integer> indexAliases = new HashMap<>();
         indexAliases.put("first", 1);
-        indexAliases.put("last", trackManager.trackQueue.size());
+        indexAliases.put("last", trackManager.getTrackQueue().size());
 
         int parsedIndex;
         String index = args[0];
@@ -75,7 +76,7 @@ public class Remove implements Command {
             return;
         }
 
-        if (parsedIndex > trackManager.trackQueue.size() || parsedIndex < 1) {
+        if (parsedIndex > trackManager.getTrackQueue().size() || parsedIndex < 1) {
             messageChannel.sendMessage("That index is out of bounds.").queue();
             return;
         }

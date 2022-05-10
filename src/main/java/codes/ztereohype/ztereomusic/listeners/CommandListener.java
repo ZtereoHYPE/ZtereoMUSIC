@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class CommandListener extends ListenerAdapter {
     // TODO: load prefix from a database on a per-server basis
-    private static final String PREFIX = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("prefix");
+    private static final String PREFIX = ZtereoMUSIC.getInstance().getConfig().getPropreties().getProperty("prefix");
     private static final Map<String, Command> COMMAND_MAP = ZtereoMUSIC.getInstance().getCommandMap();
     private static final Map<String, String> COMMAND_ALIASES = ZtereoMUSIC.getInstance().getCommandAliases();
 

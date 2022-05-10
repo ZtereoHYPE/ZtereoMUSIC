@@ -22,8 +22,9 @@ public class CustomAudioLoadResultHandler implements AudioLoadResultHandler {
 
     @Override public void playlistLoaded(AudioPlaylist playlist) {
         for (AudioTrack track : playlist.getTracks()) {
-            this.trackManager.queue(track);
+            this.trackManager.getTrackQueue().add(track);
         }
+        this.messageChannel.sendMessage("Queued " + playlist.getTracks().size() + " songs from: " + playlist.getName()).queue();
     }
 
     @Override public void noMatches() {
@@ -31,8 +32,7 @@ public class CustomAudioLoadResultHandler implements AudioLoadResultHandler {
     }
 
     @Override public void loadFailed(FriendlyException throwable) {
-        this.messageChannel.sendMessage("Failed loading that audio. Try with a different source (eg. YouTube URL)")
-                           .queue();
+        this.messageChannel.sendMessage("Failed loading that audio. Try with a different source (eg. YouTube URL)").queue();
     }
 }
 

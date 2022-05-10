@@ -11,7 +11,8 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Clear implements Command {
-    private @Getter final CommandMeta meta;
+    private @Getter
+    final CommandMeta meta;
 
     public Clear() {
         this.meta = CommandMeta.builder()
@@ -20,10 +21,7 @@ public class Clear implements Command {
                 .description("Clears the queue and stops playing.")
                 .isNsfw(false)
                 .isHidden(false)
-                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                            VoiceChecks.BOT_PLAYING,
-                                            VoiceChecks.USER_CONNECTED,
-                                            VoiceChecks.SAME_VC_IF_CONNECTED })
+                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED, VoiceChecks.BOT_PLAYING, VoiceChecks.USER_CONNECTED, VoiceChecks.SAME_VC_IF_CONNECTED })
                 .build();
     }
 
@@ -34,7 +32,7 @@ public class Clear implements Command {
 
         assert trackManager != null; // the command will not execute if it is anyway because of our VoiceChecks (BOT_PLAYING)
 
-        int tracksLeft = trackManager.trackQueue.size();
+        int tracksLeft = trackManager.getTrackQueue().size();
         for (int i = 0; i < tracksLeft; i++) {
             trackManager.removeQueueItem(0);
         }

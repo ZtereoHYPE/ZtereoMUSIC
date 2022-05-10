@@ -17,11 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrackManager extends AudioEventAdapter {
-    public final List<AudioTrack> trackQueue = new ArrayList<>();
-    private final @Getter AudioPlayer player;
+    private final @Getter
+    List<AudioTrack> trackQueue = new ArrayList<>();
+    private final @Getter
+    AudioPlayer player;
     private String hasRetriedId;
     private @Getter
-    @Setter MessageChannel infoChannel;
+    @Setter
+    MessageChannel infoChannel;
 
     public TrackManager(AudioPlayerManager playerManager, MessageChannel infoChannel) {
         this.player = playerManager.createPlayer();
@@ -90,6 +93,7 @@ public class TrackManager extends AudioEventAdapter {
             case FINISHED -> playNext();
 
             case LOAD_FAILED -> {
+                System.out.println("tracc failed");
                 String identifier;
                 String trackTitle = track.getInfo().title;
 
@@ -118,7 +122,7 @@ public class TrackManager extends AudioEventAdapter {
 
     @Override public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         //        infoChannel.sendMessage("Uh oh, a track did something strange. Ask the owner to check for errors in console. ").queue();
-        //        System.out.println(exception.getCause().getMessage());
+        System.out.println(exception.getCause().getMessage());
         onTrackEnd(player, track, AudioTrackEndReason.LOAD_FAILED);
     }
 

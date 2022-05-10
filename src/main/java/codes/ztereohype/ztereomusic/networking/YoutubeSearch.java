@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class YoutubeSearch {
-    private static final String API_KEY = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("yt_api_key");
+    private static final String API_KEY = ZtereoMUSIC.getInstance().getConfig().getPropreties().getProperty("yt_api_key");
     private static final Json JSON = Json.json();
 
     public static Pair<Boolean, String> query(String title) {
