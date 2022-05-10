@@ -10,8 +10,7 @@ import java.util.Objects;
 
 public enum VoiceChecks {
     BOT_CONNECTED(new Check() {
-        @Override
-        public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager) {
+        @Override public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager) {
             return connectedChannel != null;
         }
 
@@ -21,10 +20,7 @@ public enum VoiceChecks {
     }),
 
     BOT_PLAYING(new Check() {
-        @Override
-        public boolean getResult(Member messageAuthor,
-                                 VoiceChannel connectedChannel,
-                                 @Nullable TrackManager trackManager) {
+        @Override public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, @Nullable TrackManager trackManager) {
             return trackManager != null && trackManager.getPlayer().getPlayingTrack() != null;
         }
 
@@ -34,8 +30,7 @@ public enum VoiceChecks {
     }),
 
     USER_CONNECTED(new Check() {
-        @Override
-        public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager) {
+        @Override public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager) {
             if (messageAuthor.getVoiceState() == null) return false;
             return messageAuthor.getVoiceState().inVoiceChannel();
         }
@@ -46,8 +41,7 @@ public enum VoiceChecks {
     }),
 
     SAME_VC_IF_CONNECTED(new Check() { // the "if connected" specifies to the bot: if the bot is not connected always return true since the condition should be ignored basically. if the user is not in vc and the bot is though...
-        @Override
-        public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager) {
+        @Override public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager) {
             if (connectedChannel == null) return true;
             if (messageAuthor.getVoiceState() == null) return false;
             return Objects.equals(messageAuthor.getVoiceState().getChannel(), connectedChannel);
@@ -60,17 +54,17 @@ public enum VoiceChecks {
 
     // Note: this is currently unused but will be used for role-based permissions
     HAS_ROLE(new Check() {
-        @Override
-        public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager) {
-            return false;
+        @Override public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, TrackManager trackManager) {
+            return messageAuthor.getRoles().stream().anyMatch(r -> r.getName().equals("DJ"));
         }
 
         @Override public String getErrorCode() {
-            return "You don't have the *DJ role*.";
+            return "You don't have the *DJ role*~.";
         }
     });
 
-    private @Getter final Check check;
+    private @Getter
+    final Check check;
 
     VoiceChecks(Check check) {
         this.check = check;
