@@ -24,9 +24,7 @@ public class Queue implements Command {
                 .aliases(new String[] { "q" })
                 .isNsfw(false)
                 .isHidden(false)
-                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED,
-                                            VoiceChecks.USER_CONNECTED,
-                                            VoiceChecks.SAME_VC_IF_CONNECTED })
+                .checks(new VoiceChecks[] { VoiceChecks.BOT_CONNECTED, VoiceChecks.USER_CONNECTED, VoiceChecks.SAME_VC_IF_CONNECTED })
                 .build();
     }
 
@@ -36,15 +34,18 @@ public class Queue implements Command {
 
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
         Guild guild = messageEvent.getGuild();
-        VoiceChannel voiceChannel = Objects.requireNonNull(Objects.requireNonNull(messageEvent.getMember())
-                                                                  .getVoiceState()).getChannel();
+        VoiceChannel voiceChannel = Objects.requireNonNull(Objects.requireNonNull(messageEvent.getMember()).getVoiceState()).getChannel();
         MessageChannel messageChannel = messageEvent.getChannel();
 
         TrackManager trackManager = TrackManagers.getOrCreateGuildTrackManager(guild, messageChannel, voiceChannel);
 
         StringBuilder messageBuilder = new StringBuilder();
-        List<AudioTrack> trackList = trackManager.trackQueue;
+        List<AudioTrack> trackList = trackManager.getTrackQueue();
         for (AudioTrack track : trackList) {
+            if (messageBuilder.length() > 1900) {
+                messageBuilder.append("...and " + (trackList.size() - trackList.indexOf(track)) + " more items.");
+                break;
+            }
             messageBuilder.append(trackList.indexOf(track) + 1).append(". ");
             messageBuilder.append(track.getInfo().title);
             messageBuilder.append(System.getProperty("line.separator"));
@@ -56,5 +57,4 @@ public class Queue implements Command {
 
         messageChannel.sendMessage(messageBuilder.toString()).queue();
     }
-
 }

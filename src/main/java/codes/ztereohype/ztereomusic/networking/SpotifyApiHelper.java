@@ -20,8 +20,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SpotifyApiHelper {
-    private static final String CLIENT_ID = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("spotify_client_id");
-    private static final String CLIENT_SECRET = ZtereoMUSIC.getInstance().getConfig().getPropreties().get("spotify_client_secret");
+    private static final String CLIENT_ID = ZtereoMUSIC.getInstance().getConfig().getPropreties().getProperty("spotify_client_id");
+    private static final String CLIENT_SECRET = ZtereoMUSIC.getInstance().getConfig().getPropreties().getProperty("spotify_client_secret");
     private static final Pattern IDENTIFIER_PATTERN = Pattern.compile(
             "(?:(?<=https://open\\.spotify\\.com/track/)|(?<=https://open\\.spotify\\.com/playlist/))(\\S+(?=\\?si=\\S))");
     private static final Json JSON = Json.json();

@@ -31,8 +31,6 @@ public class Fart implements Command {
     }
 
     public void execute(MessageReceivedEvent messageEvent, String[] args) {
-
-        System.out.println("dsijfgajsdgu");
         VoiceChannel voiceChannel = Objects.requireNonNull(messageEvent.getMember().getVoiceState()).getChannel();
 
         TrackManager trackManager = TrackManagers.getOrCreateGuildTrackManager(messageEvent.getGuild(), messageEvent.getChannel(), voiceChannel);
