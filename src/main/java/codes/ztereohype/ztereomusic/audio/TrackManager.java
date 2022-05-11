@@ -21,7 +21,7 @@ public class TrackManager extends AudioEventAdapter {
     List<AudioTrack> trackQueue = new ArrayList<>();
     private final @Getter
     AudioPlayer player;
-    private String hasRetriedId;
+    private String hasRetriedId = "uwu";
     private @Getter
     @Setter
     MessageChannel infoChannel;
