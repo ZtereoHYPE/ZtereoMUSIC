@@ -43,7 +43,6 @@ public class AloneDisconnectListener extends ListenerAdapter {
 
         // if there's only one member (and i'm still in), be alone and start a 5m timer
         if (guild.getAudioManager().getConnectedChannel().getMembers().size() == 1) {
-            System.out.println("i'm alone");
             aloneGuilds.put(guild, System.currentTimeMillis());
         }
     }
