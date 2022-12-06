@@ -21,7 +21,7 @@ public enum VoiceChecks {
 
     BOT_PLAYING(new Check() {
         @Override public boolean getResult(Member messageAuthor, VoiceChannel connectedChannel, @Nullable TrackManager trackManager) {
-            return trackManager != null && trackManager.getPlayer().getPlayingTrack() != null;
+            return trackManager != null && (trackManager.getPlayer().getPlayingTrack() != null || trackManager.getTrackQueue().size() > 0);
         }
 
         @Override public String getErrorCode() {
